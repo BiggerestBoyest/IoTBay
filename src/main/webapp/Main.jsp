@@ -3,7 +3,7 @@
     Created on : 06/04/2024, 5:14:24 PM
     Author     : Owner
 --%>
-<link rel="stylesheet" href="css/Welcome.css">
+<link rel="stylesheet" href="css/main.css">
 <%@page import="com.isd.assignment1.Customer" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -12,25 +12,28 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="css/register.css">
            <%
-                String firstName = request.getParameter("fname");
-                String lastName = request.getParameter("lname");
-                String email = request.getParameter("email");
-                String password = request.getParameter("password");
-                String dob = request.getParameter("dob");
+                Customer customer = (Customer)session.getAttribute("customer");
             %>
         <title>Welcome Page </title>
-      <div class="header">
+        <div class="header">
              <img src="css/IOTBAY Logo.png">
-         </div>
+             <div class="dropdown" style="float:right" >
+                <button class="dropbtn"></button> 
+                <div class="dropdown-content">
+                    <a href ="#">Show Orders</a>
+                    <a href ="#">Edit Profile</a>
+                    <a href ="Logout.jsp">Logout</a>
+                </div>
+             </div>
+        </div>
     </head>
     <body>
-        <div id="content"
-            <h1>Welcome <%= firstName%> <%= lastName%> </h1>
-        <input type="button" onclick=""
+        <div id="content">
+            <table>
+            <thead><th>Name</th><th>Email</th><th>Password</th><th>Date of Birth</th></thead>
+            <tr><td>${customer.GetName()}</td><td>${customer.GetEmail()}</td><td>${customer.GetPassword()}</td><td>${customer.GetDOB()}</td></tr>
+            </table>
         </div>
-        <%
-            Customer customer = new Customer(firstName,lastName,email,password,dob);
-            session.setAttribute("customer",customer);
-        %>
+      
     </body>
 </html>

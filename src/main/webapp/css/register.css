@@ -14,12 +14,16 @@ input[type=button],input[type=submit]
   display: inline-block;
   font-size: 16px;
 }
-input[type=button]:hover,input[type=submit]:hover
+
+
+
+
+input[type=button]:hover,input[type=submit]:hover,a:hover
 {
   background-color:#000000; 
 }
 
-input[type=button]:focus,input[type=submit]:focus
+input[type=button]:focus,input[type=submit]:focus,a:focus
 {
   background-color: #f2f2f2; 
   color: black;

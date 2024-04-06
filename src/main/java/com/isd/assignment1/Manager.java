@@ -10,15 +10,21 @@ package com.isd.assignment1;
  *
  * @author Owner
  */
-public class Validator 
+import java.util.List;
+
+
+public class Manager 
 {
-    public boolean IsValidLogin(){return true;}
 
-    public boolean IsValidConfirmPassword(String password, String confirmedPassword)
+    private int _id;
+    private String _name;
+    private int _hoursWorked;
+    private List<Staff> _employees;
+    
+    public Manager(int id, String name)
     {
-        return password.equals(confirmedPassword);
+        _id = id;
+        _name = name;
     }
-
-
 
 }

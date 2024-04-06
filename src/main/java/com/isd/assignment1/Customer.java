@@ -12,6 +12,7 @@ public class Customer
     private String _password;
     private String _dob;
 
+
     public Customer(String firstName,String lastName, String email, String password, String dob)
     {
         _firstName = firstName;

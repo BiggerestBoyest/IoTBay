@@ -12,7 +12,8 @@
         <style>
           h1 {
           font-family: "Oswald", sans-serif;
-          font-size: 40px;
+          font-size: 30px;
+          font-style: normal;
           }
           
           input[type="button"]{
@@ -28,19 +29,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="css/register.css">
            <%
-                String firstName = request.getParameter("fname");
-                String lastName = request.getParameter("lname");
-                String email = request.getParameter("email");
-                String password = request.getParameter("password");
-                String dob = request.getParameter("dob");
-
-               /*to delete just test case for a logged in user*/
-               if(email.equals("example@gmail.com") && password.equals("example"))
-               {
-                   firstName = "James";
-                   lastName = "Liam";
-                   dob = "20-12-2001";
-               }
+                session.invalidate();
             %>
         <title>Welcome Page </title>
       <div class="header">
@@ -49,12 +38,8 @@
     </head>
     <body>
         <div id="content">
-             <h1>Welcome <%= firstName%> <%= lastName%> </h1><p></p>
-            <a href="Main.jsp"><input type="button" value="Continue"></a>
+            <h1>You have been logged out. Click <a href="Index.jsp">Here</a> to return to the home page</h1><p></p>
         </div>
-        <%
-            Customer customer = new Customer(firstName,lastName,email,password,dob);
-            session.setAttribute("customer",customer);
-        %>
+      
     </body>
 </html>
