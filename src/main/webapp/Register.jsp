@@ -5,10 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="com.isd.assignment1.Validator" %>
-<%
-    Validator validator = new Validator();
-%>
+
 <!DOCTYPE html>
 <html>
     <head>
