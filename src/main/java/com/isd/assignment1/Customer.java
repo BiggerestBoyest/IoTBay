@@ -6,23 +6,27 @@ package com.isd.assignment1;
  */
 public class Customer 
 {
-    private String Name;
-    private String Email;
-    private String Password;
-    private String DOB;
+    private String _firstName;
+    private String _lastName;
+    private String _email;
+    private String _password;
+    private String _dob;
 
-    public Customer(String name, String email, String password, String dob)
+    public Customer(String firstName,String lastName, String email, String password, String dob)
     {
-        Name = name;
-        Email = email;
-        Password = password;
-        DOB = dob;
+        _firstName = firstName;
+        _lastName = lastName;
+        _email = email;
+        _password = password;
+        _dob = dob;
     }
 
 
-    public String GetName() { return Name;}
-    public String GetEmail() { return Email;}
-    public String GetPassword()  {return Password;}
-    public String GetDOB() {return DOB;}
+    public String GetName() { return _firstName + " " + _lastName;}
+    public String GetFirstName() { return _firstName;}
+    public String GetLastName() { return _lastName;}
+    public String GetEmail() { return _email;}
+    public String GetPassword()  {return _password;}
+    public String GetDOB() {return _dob;}
 
 }

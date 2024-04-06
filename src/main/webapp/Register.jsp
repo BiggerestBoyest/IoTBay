@@ -14,8 +14,16 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
         <style>
-        body {
+        .formText {
           font-family: "Oswald", sans-serif;
+          font-size: 20px;
+          
+        }
+        
+          h1 {
+          font-family: "Oswald", sans-serif;
+          font-size: 40px;
+          
         }
         </style>
          <title>Registration Page</title>
@@ -35,9 +43,12 @@
                 <tr><td><label class ="formText" for="password">Password</label><p><input type="password" placeholder="Enter password" name="password" required="true"></p></td></tr>
                 <tr><td><label class ="formText" for="confirmPassword">Confirm Password</label><p><input type="password" placeholder="Confirm Password" name="confirmPassword" required="true"></p></td></tr>
             </table>
-            <div align="center">
-                <input type="button"  value ="Cancel">
-                <input type="submit"  value ="Register">
+            <div align="center" class="buttons">
+                <table>
+                    <tr><td id="btnRegister"><input type="button"  value ="Cancel">
+                        </td><td><input type="submit"  value ="Register"></td></tr>
+                </table>
+              
             </div>
         </form>
         </div>
