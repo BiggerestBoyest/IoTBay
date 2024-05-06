@@ -34,7 +34,7 @@
     <body>
         <div class="Content" >
         <h1 align="center">Login</h1>
-        <form action="Welcome.jsp" method="post">
+        <form action="LoginServlet" method="post">
             <table>
                 <tr><td><label class ="formText" for="email">Email</label><p><input type="email" placeholder="Enter email" name="email" required="true"></p></td></tr>
                 <tr><td><label class ="formText" for="password">Password</label><p><input type="password" placeholder="Enter password" name="password" required="true"></p></td></tr>
