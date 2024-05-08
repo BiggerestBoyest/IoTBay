@@ -41,6 +41,7 @@
                 </table>
             </div>
         </div>
+        <jsp:include page="/ConnServlet" flush="true" />
     </body>
 </html>
 

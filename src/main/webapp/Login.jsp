@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.isd.iotbay.dao.DBManager" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,13 +28,21 @@
           
         }
         </style>
-         <title>Registration Page</title>
+         <title>Login Page</title>
          <div class="header">
              <img src="css/IOTBAY Logo.png">
          </div>
     </head>
     <body>
+        <div><span>
+                
         <div class="Content" >
+        <%
+            
+            String emailError = (String)session.getAttribute("emailError") ;
+            String passwordError = (String)session.getAttribute("passwordError");
+            String loginError = (String)session.getAttribute("loginError");
+        %>
         <h1 align="center">Login</h1>
         <form action="LoginServlet" method="post">
             <table>

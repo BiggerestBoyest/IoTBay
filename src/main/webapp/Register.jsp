@@ -27,7 +27,7 @@
           
         }
         </style>
-         <title>Registration Page</title>
+         <title>Login Page</title>
          <div class="header">
              <img src="css/IOTBAY Logo.png">
          </div>

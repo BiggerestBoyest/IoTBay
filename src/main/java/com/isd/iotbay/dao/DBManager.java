@@ -22,13 +22,14 @@ public class DBManager
         {
             String customerEmail = set.getString(4);
             String customerPassword = set.getString(5);
-            
+
             if(customerEmail.equals(email) && customerPassword.equals(customerPassword))
             {
                 String customerGivenName = set.getString(2);
                 String customerSurname = set.getString(3);
                 String customerDOB = set.getString(8);
                 Customer customer = new Customer(customerGivenName, customerSurname,customerEmail,customerPassword,customerDOB);
+                return customer;
             }
         }
 

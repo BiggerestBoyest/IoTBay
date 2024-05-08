@@ -50,13 +50,8 @@ public class ConnServlet extends HttpServlet
                Logger.getLogger(ConnServlet.class.getName()).log(Level.SEVERE, null, ex);
 
            }
-
-
            session.setAttribute("manager", dbManager);           
-
        }   
-        
-
 
         public void Destroy() 
         {

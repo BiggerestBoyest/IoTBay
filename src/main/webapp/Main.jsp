@@ -5,6 +5,7 @@
 --%>
 <link rel="stylesheet" href="css/main.css">
 <%@page import="com.isd.assignment1.Customer" %>
+<%@page import="com.isd.iotbay.dao.DBManager" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,6 +14,7 @@
         <link rel="stylesheet" href="css/register.css">
            <%
                 Customer customer = (Customer)session.getAttribute("customer");
+
             %>
         <title>Welcome Page </title>
         <div class="header">
