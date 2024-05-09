@@ -22,17 +22,10 @@ public class LoginServlet extends HttpServlet
         String password  = request.getParameter("password");
         DBManager manager = (DBManager)currentSession.getAttribute("manager");
         Customer customer = null;
+        validator.ClearErrors(currentSession);
         try
-        {   if(manager == null)
-                System.out.println("null manager");
-                
-        
-                             System.out.println(email);
-                System.out.println(password);
-   
-            customer = manager.ReadCustomer(email, password);
-            
-        
+        {   
+            customer = manager.ReadCustomer(email, password) == null ? null : manager.ReadCustomer(email, password);
         } catch (SQLException ex)
         {
               Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);       
@@ -41,20 +34,19 @@ public class LoginServlet extends HttpServlet
         if (!validator.ValidateEmail(email)) 
         {
             currentSession.setAttribute("emailError", "Email invalid, please try again.");
-            request.getRequestDispatcher("login.jsp").include(request,response);
+            request.getRequestDispatcher("Login.jsp").forward(request,response);
         } else if (!validator.ValidatePassword(password)) 
         {
-            currentSession.setAttribute("passwordError", "Email invalid, please try again.");
-            request.getRequestDispatcher("login.jsp").include(request,response);
+            currentSession.setAttribute("passwordError", "Password invalid, please try again.");
+            request.getRequestDispatcher("Login.jsp").forward(request,response);
         } else if (customer != null)
         {
             currentSession.setAttribute("customer",customer);
             request.getRequestDispatcher("Main.jsp").forward(request,response);
         } else
         {
-            System.out.println("null test test");
             currentSession.setAttribute("loginError", "User was not found");
-            request.getRequestDispatcher("login.jsp").include(request,response);
+            request.getRequestDispatcher("Login.jsp").forward(request,response);
         }
         
     }

@@ -1,5 +1,6 @@
 package com.isd.iotbay.controller;
 import java.io.Serializable;
+import javax.servlet.http.HttpSession;
 
 public class Validator implements Serializable 
 {
@@ -30,6 +31,13 @@ public class Validator implements Serializable
         int spaceSymbolGivenName = givenName.indexOf(" "); 
         int spaceSymbolSurname = surname.indexOf(" ");
         return spaceSymbolGivenName == -1 &&  spaceSymbolSurname == -1;
+    }
+    
+    public void ClearErrors(HttpSession currentSession)
+    {
+        currentSession.setAttribute("emailError",null) ;
+        currentSession.setAttribute("passwordError",null);
+        currentSession.setAttribute("loginError",null);
     }
     
 }

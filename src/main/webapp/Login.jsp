@@ -56,6 +56,9 @@
                 </table>
             </div>
         </form>
+        <h1><span class = "message"><%=(emailError != null ? emailError : "")%></span></h1>
+        <h1><span class = "message"><%=(passwordError!= null ? passwordError : "")%></span></h1>
+        <h1><span class = "message"><%=(loginError != null ? loginError : "")%></span></h1>
         </div>
     </body>
 </html>
