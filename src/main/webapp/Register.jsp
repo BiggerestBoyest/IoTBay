@@ -33,15 +33,24 @@
          </div>
     </head>
     <body>
+        <%
+               
+            
+            String emailError = (String)session.getAttribute("emailError") ;
+            String passwordError = (String)session.getAttribute("passwordError");
+            String loginError = (String)session.getAttribute("loginError");
+
+        %>
         <div class="Content" >
         <h1 align="center">Become a member</h1>
-        <form action="Welcome.jsp" method="post" id="registerForm">
+        <form action="RegisterServlet" method="post" id="registerForm">
             <table>
                 <tr><td><label class ="formText" for="fname">First Name</label><p><input type="text" placeholder="Enter first name" name="fname" required="true"></p></td></tr>
                 <tr><td><label class ="formText" for="lname">Last Name</label><p><input type="text" placeholder="Enter last name" name="lname" required="true"></p></td></tr>
                 <tr><td><label class ="formText" for="dob">Date of Birth</label><p><input type="date" placeholder="Date of Birth" name="dob" required="true"></p></td></tr>
-                <tr><td><label class ="formText" for="email">Email</label><p><input type="email" placeholder="Enter email" name="email" required="true"></p></td></tr>
-                <tr><td><label class ="formText" for="password">Password</label><p><input type="password" placeholder="Enter password" name="password" required="true" id="pass"></p></td></tr>
+                <tr><td><label class ="formText" for="email">Email</label><p><input style="<%=emailError != null ? "border:3.5px solid #FF0000" : "border:3px solid #cccccc"%>" type="email" placeholder="Enter email" name="email" required="true"></p></td></tr>
+                <tr><td><label class ="formText" for="phone">Phone</label><p><input type="number" placeholder="Enter phone" name="phone" required="true"></p></td></tr>
+                <tr><td><label class ="formText" for="password">Password</label><p><input type="password" style="<%=passwordError != null ? "border:3.5px solid #FF0000" : "border:3px solid #cccccc"%>" placeholder="Enter password" name="password" required="true" id="pass"></p></td></tr>
                 <tr><td><label class ="formText" for="confirmPassword" >Confirm Password</label><p><input type="password" placeholder="Confirm Password" name="confirmPassword" required="true"  id="confirmPass"></p></td></tr>
             </table>
             <div align="center" class="buttons">
@@ -53,20 +62,10 @@
             </div>
         </form>
         </div>
+        <h1><span class = "message"><%=(emailError != null ? emailError : "")%></span></h1>
+        <h1><span class = "message"><%=(passwordError!= null ? passwordError : "")%></span></h1>
+        <h1><span class = "message"><%=(loginError != null ? loginError : "")%></span></h1>
     </body>
 </html>
 
-<script>
-    
-     document.getElementById('registerForm').addEventListener('submit', function(event) {
-        let firstPass = document.getElementById("pass")
-        let secondPass = document.getElementById("confirmPass")
-        
-         if(firstPass.value != secondPass.value)
-         {
-            firstPass.style.border = "3px solid red";
-            secondPass.style.border = "3px solid red";
-            event.preventDefault();
-         }
-  });
-</script>
+

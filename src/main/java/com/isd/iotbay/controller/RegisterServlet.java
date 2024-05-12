@@ -8,15 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.isd.assignment1.Customer;
-import com.isd.iotbay.AccessLog;
-
 import com.isd.iotbay.dao.DBManager;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
-public class LoginServlet extends HttpServlet 
+public class RegisterServlet extends HttpServlet 
 {
     @Override   
     protected void doPost(HttpServletRequest request, HttpServletResponse response)   throws ServletException, IOException {       
@@ -24,50 +19,55 @@ public class LoginServlet extends HttpServlet
         HttpSession currentSession = request.getSession();
         Validator validator = new Validator();
         String email = request.getParameter("email");
+        String givenName = request.getParameter("fname");
+        String surname = request.getParameter("lname");
+        String dob = request.getParameter("dob");
+        String confirmPassword = request.getParameter("confirmPassword");
         String password  = request.getParameter("password");
+        String phoneNumber = request.getParameter("phone");
+        System.out.println(phoneNumber + " phone number");
         DBManager manager = (DBManager)currentSession.getAttribute("manager");
         Customer customer = null;
-        AccessLog log = null;
         validator.ClearErrors(currentSession);
         try
         {   
             customer = manager.ReadCustomer(email, password) == null ? null : manager.ReadCustomer(email, password);
         } catch (SQLException ex)
         {
-              Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);       
+              //Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);       
         }
         
         if (!validator.ValidateEmail(email)) 
         {
             currentSession.setAttribute("emailError", "Email invalid, please try again.");
-            request.getRequestDispatcher("Login.jsp").forward(request,response);
+            request.getRequestDispatcher("Register.jsp").forward(request,response);
         } else if (!validator.ValidatePassword(password)) 
         {
             currentSession.setAttribute("passwordError", "Password invalid, please try again.");
-            request.getRequestDispatcher("Login.jsp").forward(request,response);
+            request.getRequestDispatcher("Register.jsp").forward(request,response);
+        } else if (!validator.ConfirmPassword(password, confirmPassword))
+        {
+            currentSession.setAttribute("passwordError", "Passwords do not match.");
+            request.getRequestDispatcher("Register.jsp").forward(request,response);
         } else if (customer != null)
         {
-            int customerID = customer.GetID();
-            String currentDate = LocalDate.now().toString();
-            String currentTime = LocalTime.now().toString();
-            int logID = -1;
-            AccessLog currentLog = null;
-            try 
+            currentSession.setAttribute("loginError","An account with that email is already registered.");
+            request.getRequestDispatcher("Register.jsp").forward(request,response);
+        } else // if no customer was found and all fields are valid, then create and add a new customer.
+        {
+            customer = new Customer(givenName,surname, email,password,dob,phoneNumber);
+            try
             {
-                logID = manager.GenerateNewLogID();
-                currentLog = new AccessLog(logID,customerID,currentDate, currentTime);
-                manager.GenerateNewAccessLog(logID,customerID,currentDate,currentTime);
+                int newID = manager.GenerateUniqueID();
+                System.out.println(newID + " new id");
+                manager.AddCustomer(newID, givenName, surname, email, password, dob, phoneNumber);
+                
             } catch (SQLException ex)
             {
-                System.out.println(ex + " sql error");
+                System.out.println(ex);
             }
-            currentSession.setAttribute("currentLog", currentLog);
-            currentSession.setAttribute("customer",customer);
+            currentSession.setAttribute("customer", customer);
             request.getRequestDispatcher("Main.jsp").forward(request,response);
-        } else
-        {
-            currentSession.setAttribute("loginError", "User was not found");
-            request.getRequestDispatcher("Login.jsp").forward(request,response);
         }
         
     }

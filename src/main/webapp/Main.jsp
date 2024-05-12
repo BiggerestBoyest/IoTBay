@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="css/main.css">
 <%@page import="com.isd.assignment1.Customer" %>
 <%@page import="com.isd.iotbay.dao.DBManager" %>
+<%@page import="com.isd.iotbay.AccessLog" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,6 +16,7 @@
         <link rel="stylesheet" href="css/register.css">
            <%
                 Customer customer = (Customer)session.getAttribute("customer");
+                AccessLog currentLog = (AccessLog)session.getAttribute("currentLog");
 
             %>
         <title>Welcome Page </title>
@@ -23,8 +26,8 @@
                 <button class="dropbtn"></button> 
                 <div class="dropdown-content">
                     <a href ="#">Show Orders</a>
-                    <a href ="#">Edit Profile</a>
-                    <a href ="Logout.jsp">Logout</a>
+                    <a href ="EditProfile.jsp">Edit Profile</a>
+                    <a href ="LogoutServlet">Logout</a>
                 </div>
              </div>
         </div>

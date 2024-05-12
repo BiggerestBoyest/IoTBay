@@ -40,4 +40,9 @@ public class Validator implements Serializable
         currentSession.setAttribute("loginError",null);
     }
     
+    public boolean ConfirmPassword(String password, String confirmPassword)
+    {
+        return password.equals(confirmPassword);
+    }
+    
 }
