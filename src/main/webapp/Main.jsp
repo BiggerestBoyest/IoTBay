@@ -26,7 +26,7 @@
                 <button class="dropbtn"></button> 
                 <div class="dropdown-content">
                     <a href ="#">Show Orders</a>
-                    <a href ="EditProfile.jsp">Edit Profile</a>
+                    <a href ="AccessLogServlet">Edit Profile</a>
                     <a href ="LogoutServlet">Logout</a>
                 </div>
              </div>

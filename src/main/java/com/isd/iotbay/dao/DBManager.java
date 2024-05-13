@@ -32,7 +32,10 @@ public class DBManager
                 String customerSurname = set.getString(3);
                 String customerDOB = set.getString(8);
                 String customerPhone = set.getString(9);
-                Customer customer = new Customer(customerID,customerGivenName, customerSurname,customerEmail,customerPassword,customerDOB,customerPhone);
+                String customerAddress = set.getString(6);
+                String customerPaymentDetails = set.getString(7);
+
+                Customer customer = new Customer(customerID,customerGivenName, customerSurname,customerEmail,customerPassword,customerDOB,customerPhone,customerAddress,customerPaymentDetails);
                 return customer;
             }
         }
@@ -98,9 +101,9 @@ public class DBManager
         statement.executeUpdate(query);
     }
 
-    public void UpdateCustomer( String givenName, String surname,String email, String password, String dob, String phoneNumber) throws SQLException 
+    public void UpdateCustomer(int customerID, String givenName, String surname, String email, String password, String address, String paymentDetails, String dob, String phone ) throws SQLException 
     {       
-        String query = "UPDATE USERDB.Customers SET GIVENNAME ='" + givenName + "',SURNAME='" + surname + "',PASSWORD='" + password + "',EMAIL='" + email + "',DOB=" + dob + "' WHERE EMAIL='" + email + "'";
+        String query = "UPDATE USERDB.Customers SET GIVENNAME ='" + givenName + "',SURNAME='" + surname + "',PASSWORD='" + password + "',EMAIL='" + email + "',DOB='" + dob + "' , ADDRESS ='" + address + "' , PAYMENTDETAILS='" + paymentDetails + "', PHONE='" + phone +  "' WHERE ID=" + customerID;
         statement.executeUpdate(query);
     }       
 
