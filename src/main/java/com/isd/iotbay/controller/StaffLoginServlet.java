@@ -7,16 +7,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.isd.iotbay.Customer;
+import com.isd.iotbay.Staff;
 import com.isd.iotbay.AccessLog;
 
 import com.isd.iotbay.dao.DBManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
-public class LoginServlet extends HttpServlet 
+public class StaffLoginServlet extends HttpServlet 
 {
     @Override   
     protected void doPost(HttpServletRequest request, HttpServletResponse response)   throws ServletException, IOException {       
@@ -26,29 +25,29 @@ public class LoginServlet extends HttpServlet
         String email = request.getParameter("email");
         String password  = request.getParameter("password");
         DBManager manager = (DBManager)currentSession.getAttribute("manager");
-            currentSession.setAttribute("staff",null);
-        Customer customer = null;
+        currentSession.setAttribute("customer", null);
+        Staff staff = null;
         AccessLog log = null;
         validator.ClearErrors(currentSession);
         try
         {   
-            customer = manager.ReadCustomer(email, password) == null ? null : manager.ReadCustomer(email, password);
+            staff = manager.ReadStaff(email, password) == null ? null : manager.ReadStaff(email, password);
         } catch (SQLException ex)
         {
-              Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);       
+              Logger.getLogger(StaffLoginServlet.class.getName()).log(Level.SEVERE, null, ex);       
         }
         
         if (!validator.ValidateEmail(email)) 
         {
             currentSession.setAttribute("emailError", "Email invalid, please try again.");
-            request.getRequestDispatcher("Login.jsp").forward(request,response);
+            request.getRequestDispatcher("StaffLogin.jsp").forward(request,response);
         } else if (!validator.ValidatePassword(password)) 
         {
             currentSession.setAttribute("passwordError", "Password invalid, please try again.");
-            request.getRequestDispatcher("Login.jsp").forward(request,response);
-        } else if (customer != null)
+            request.getRequestDispatcher("StaffLogin.jsp").forward(request,response);
+        } else if (staff != null)
         {
-            int customerID = customer.GetID();
+            int staffID = staff.GetID();
             String currentDate = LocalDate.now().toString();
             String currentTime = LocalTime.now().toString();
             int logID = -1;
@@ -56,19 +55,19 @@ public class LoginServlet extends HttpServlet
             try 
             {
                 logID = manager.GenerateNewLogID();
-                currentLog = new AccessLog(logID,customerID,currentDate, currentTime);
-                manager.GenerateNewAccessLog(logID,customerID,currentDate,currentTime);
+                currentLog = new AccessLog(logID,currentDate, currentTime,staffID);
+                manager.GenerateNewAccessLog(logID,currentDate,currentTime, staffID);
             } catch (SQLException ex)
             {
                 System.out.println(ex + " sql error");
             }
             currentSession.setAttribute("currentLog", currentLog);
-            currentSession.setAttribute("customer",customer);
+            currentSession.setAttribute("staff",staff);
             request.getRequestDispatcher("Main.jsp").forward(request,response);
         } else
         {
             currentSession.setAttribute("loginError", "User was not found");
-            request.getRequestDispatcher("Login.jsp").forward(request,response);
+            request.getRequestDispatcher("StaffLogin.jsp").forward(request,response);
         }
         
     }

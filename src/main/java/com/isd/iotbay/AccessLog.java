@@ -7,6 +7,7 @@ package com.isd.iotbay;
 public class AccessLog 
 {
     private int _logID;
+    private int _staffID;
     private int _customerID;
     private String _loginDate;
     private String _loginTime;
@@ -17,6 +18,14 @@ public class AccessLog
     {
         _logID = logID;
         _customerID = customerID;
+        _loginDate = loginDate;
+        _loginTime = loginTime;
+    }
+    
+     public AccessLog(int logID, String loginDate, String loginTime, int staffID)
+    {
+        _logID = logID;
+        _staffID = staffID;
         _loginDate = loginDate;
         _loginTime = loginTime;
     }
@@ -32,6 +41,7 @@ public class AccessLog
     }
     
     public int GetLogID() {return _logID;}
+    public int GetStaffID() {return _staffID;}
     public int GetCustomerID(){return _customerID;}
     public String GetLoginDate(){return _loginDate;}
     public String GetLoginTime(){return _loginTime;}

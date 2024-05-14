@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="css/edit_profile.css">
-<%@page import="com.isd.assignment1.Customer" %>
+<%@page import="com.isd.iotbay.Customer" %>
 <%@page import="com.isd.iotbay.dao.DBManager" %>
 <%@page import="com.isd.iotbay.AccessLog" %>
 <%@page import="java.util.ArrayList"%>

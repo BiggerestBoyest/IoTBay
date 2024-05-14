@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="css/register.css">
+        <link rel="stylesheet" href="css/staff_login.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">
@@ -43,8 +43,8 @@
             String passwordError = (String)session.getAttribute("passwordError");
             String loginError = (String)session.getAttribute("loginError");
         %>
-        <h1 align="center">Login</h1>
-        <form action="LoginServlet" method="post">
+        <h1 align="center">Staff Login</h1>
+        <form action="StaffLoginServlet" method="post">
             <table>
                 <tr><td><label class ="formText" for="email">Email</label><p><input type="email" placeholder="Enter email" name="email" required="true"></p></td></tr>
                 <tr><td><label class ="formText" for="password">Password</label><p><input type="password" placeholder="Enter password" name="password" required="true"></p></td></tr>
@@ -52,9 +52,7 @@
             <div align="center" class="buttons">
                 <table>
                     <tr><td><input type="submit"  value ="Login"></td></tr>
-                    <tr><td id="btnLogin">Don't already have an account. Register <a href="Register.jsp">here</a></td></tr>
-                    <tr><td id="btnLogin">Want to login as staff. Login  <a href="StaffLogin.jsp">here</a></td></tr>
-
+                    <tr><td id="btnLogin">Not a staff? Login <a href="Login.jsp">here</a></td></tr>
                 </table>
             </div>
         </form>

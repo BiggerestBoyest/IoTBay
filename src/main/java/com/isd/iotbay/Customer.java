@@ -1,4 +1,4 @@
-package com.isd.assignment1;
+package com.isd.iotbay;
 
 /**
  *

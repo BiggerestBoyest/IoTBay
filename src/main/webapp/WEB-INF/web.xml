@@ -35,6 +35,11 @@
            <servlet-class>com.isd.iotbay.controller.RemoveCustomerServlet</servlet-class>
            <load-on-startup>0</load-on-startup>
        </servlet>
+         <servlet>
+           <servlet-name>StaffLoginServlet</servlet-name>
+           <servlet-class>com.isd.iotbay.controller.StaffLoginServlet</servlet-class>
+           <load-on-startup>0</load-on-startup>
+       </servlet>
        <servlet-mapping>
            <servlet-name>ConnServlet</servlet-name>
            <url-pattern>/ConnServlet</url-pattern>
@@ -62,6 +67,10 @@
             <servlet-mapping>
            <servlet-name>RemoveCustomerServlet</servlet-name>
            <url-pattern>/RemoveCustomerServlet</url-pattern>
+        </servlet-mapping> 
+         <servlet-mapping>
+           <servlet-name>StaffLoginServlet</servlet-name>
+           <url-pattern>/StaffLoginServlet</url-pattern>
         </servlet-mapping> 
        <session-config>
            <session-timeout>

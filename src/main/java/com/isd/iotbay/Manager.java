@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.isd.assignment1;
+package com.isd.iotbay;
 
 /**
  *

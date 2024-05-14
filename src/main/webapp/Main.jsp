@@ -1,13 +1,8 @@
-<%-- 
-    Document   : Welcome
-    Created on : 06/04/2024, 5:14:24 PM
-    Author     : Owner
---%>
 <link rel="stylesheet" href="css/main.css">
-<%@page import="com.isd.assignment1.Customer" %>
+<%@page import="com.isd.iotbay.Customer" %>
 <%@page import="com.isd.iotbay.dao.DBManager" %>
 <%@page import="com.isd.iotbay.AccessLog" %>
-
+<%@page import="com.isd.iotbay.Staff" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,6 +12,7 @@
            <%
                 Customer customer = (Customer)session.getAttribute("customer");
                 AccessLog currentLog = (AccessLog)session.getAttribute("currentLog");
+                Staff staff = (Staff)session.getAttribute("staff");
 
             %>
         <title>Welcome Page </title>
@@ -36,6 +32,7 @@
         <div id="content">
             <table>
             <thead><th>Name</th><th>Email</th><th>Password</th><th>Date of Birth</th></thead>
+            <tr><td>${staff.GetName()}</td><td>${staff.GetEmail()}</td><td>${staff.GetPassword()}</td><td>${staff.GetDOB()}</td></tr>
             <tr><td>${customer.GetName()}</td><td>${customer.GetEmail()}</td><td>${customer.GetPassword()}</td><td>${customer.GetDOB()}</td></tr>
             </table>
         </div>

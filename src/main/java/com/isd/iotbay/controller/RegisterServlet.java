@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.isd.assignment1.Customer;
+import com.isd.iotbay.Customer;
 import com.isd.iotbay.dao.DBManager;
 import java.sql.SQLException;
 

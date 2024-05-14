@@ -1,5 +1,7 @@
 package com.isd.iotbay.dao;
-import com.isd.assignment1.Customer;
+import com.isd.iotbay.Customer;
+import com.isd.iotbay.Staff;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -173,6 +175,15 @@ public class DBManager
         statement.executeUpdate(query);
     }
     
+      public void GenerateNewAccessLog(int logID,  String loginDate, String loginTime, int staffID) throws SQLException
+    {
+        
+        String subquery = "SELECT ID FROM USERDB.Staff WHERE STAFF_ID= " + staffID;
+        String query = "INSERT INTO USERDB.ACCESSLOGS (LOG_ID, FK_STAFF_ID, LOGIN_DATE, LOGIN_TIME)" + " VALUES (" + logID + ", " + "(" + subquery + ")"  + ", '" + loginDate +  "', '"  + loginTime + "')";
+        System.out.println(logID + " log id");
+        statement.executeUpdate(query);
+    }
+    
     public int GenerateNewLogID() throws SQLException
     {
         ArrayList<AccessLog> logs = ReadAllLogs();
@@ -196,9 +207,35 @@ public class DBManager
     {       
         String query = "UPDATE USERDB.ACCESSLOGS SET LOGOUT_DATE='" + logoutDate + "',LOGOUT_TIME='" + logoutTime +  "' WHERE LOG_ID=" + logID + "" + "AND FK_CUSTOMERID=" + customerID;
         statement.executeUpdate(query);
-        
-        
     }     
+    
+    public Staff ReadStaff(String email, String password) throws SQLException
+    {
+        String query = "SELECT * FROM USERDB.Staff WHERE EMAIL= '" + email + "' and PASSWORD='" + password  + "'";
+        ResultSet set = statement.executeQuery(query);
+        
+        while(set.next())
+        {
+            int staffID = set.getInt(1);
+            String staffEmail = set.getString(4);
+            String staffPassword = set.getString(5);
+
+            if(staffEmail.equals(email) && staffPassword.equals(staffPassword))
+            {
+                String staffGivenName = set.getString(2);
+                String staffSurname = set.getString(3);
+                String staffDOB = set.getString(7);
+                String staffPhone = set.getString(6);
+                String staffAddress = set.getString(8);
+                String staffPaymentDetails = set.getString(9);
+
+                Staff staff = new Staff(staffID,staffGivenName, staffSurname,staffEmail,staffPassword,staffDOB,staffPhone,staffAddress,staffPaymentDetails);
+                return staff;
+            }
+        }
+
+       return null; 
+    }
     
     public int GenerateUniqueID()
     {

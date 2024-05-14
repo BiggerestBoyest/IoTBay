@@ -4,7 +4,7 @@
     Author     : Owner
 --%>
 <link rel="stylesheet" href="css/Index.css">
-<%@page import="com.isd.assignment1.Customer" %>
+<%@page import="com.isd.iotbay.Customer" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
