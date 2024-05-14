@@ -61,7 +61,7 @@ input[type=button],input[type=submit]
 
 .modal-header .title
 {
-    font-size: 10px;
+    font-size: 15px;
     font-weight: bold;
 }
 
@@ -71,7 +71,7 @@ input[type=button],input[type=submit]
     border: none;
     outline: none;
     background: none;
-    font-size: 10px;
+    font-size: 50px;
     font-weight: bold;
 }
 

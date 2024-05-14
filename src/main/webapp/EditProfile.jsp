@@ -62,27 +62,7 @@
                     <td><label class ="formText" for="CVV">CVV</label><p><input type="text" value="<%=customer.GetCVV()%>" name="cvv" required="false"></p></td>
                 </tr>
             </table>
-                <div style="padding:10px;">
-                    <button type="button" data-modal-target="#modal" id="cancelBtn">CANCEL REGISTRATION</button>
-                    <div class ="modal" id="modal">
-                        <div class="modal-header">
-                            <div "class="title">Cancel Registration</div>
-                                <button data-modal-button class="close-button">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            Cancelling your registration will result in<br><br>
-                            • Unable to order/purchase products off the IotBay website.<br>
-                            • IoTBay will retain your access logs into the website<br>
-                            • Information regarding your profile will be removed. <br>
-                        </div>
-                          <div class="modal-buttons" style="padding-top: 10px;">
-                                <a href="RemoveCustomerServlet"><button type="button">Cancel Registration</button></a>
-                                <button type="button" data-modal-button class="return-button">Return</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="overlay"></div>
-            <div align="center" class="buttons">
+                 <div align="center" class="buttons">
                 <table>
                     <tr><td><input type="submit" form novalidate  value ="Update Details"></td></tr>
                 </table>
@@ -92,6 +72,26 @@
                 <h1><span class = "message"><%=(editStatus != null ? editStatus : "")%></span></h1>
             </div>
         </form>
+                <div style="padding:10px;">
+                    <button  data-modal-target="#modal" id="cancelBtn">CANCEL REGISTRATION</button>
+                    <div class ="modal" id="modal">
+                        <div class="modal-header">
+                            <div "class="title">Cancel Registration</div>
+                                <button data-close-button class="close-button">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            Cancelling your registration will result in<br><br>
+                            • Unable to order/purchase products off the IotBay website.<br>
+                            • IoTBay will retain your access logs into the website<br>
+                            • Information regarding your profile will be removed. <br>
+                        </div>
+                          <div class="modal-buttons" style="padding-top: 10px;">
+                                <a href="RemoveCustomerServlet"><button type="button" data-modal-button class="cancel-registration-button">Cancel Registration</button></a>
+                        </div>
+                    </div>
+                </div>
+                <div id="overlay"></div>
+           
         <div align="center"" style="margin:auto;width:50%;padding-bottom: 20px ">
         <button id="logBtn" onClick="HideTable()"; >Hide Access Logs</button>
         </div>
@@ -131,9 +131,8 @@
     </body>
 
 <script>
-const openModalButtons = document.querySelectorAll('[data-modal-target]');
+const openModalButtons = document.querySelectorAll('[data-modal-target]')
 const closeModalButtons = document.querySelectorAll('[data-close-button]');
-const cancelRegistrationModalButtons = document.querySelectorAll('[data-cancel-registration-button]');
 const overlay = document.getElementById('overlay');
 
 openModalButtons.forEach(btn => 
@@ -146,7 +145,7 @@ openModalButtons.forEach(btn =>
         openModal(modal);
     });
 });
-    
+
 closeModalButtons.forEach(btn => 
 {
     btn.addEventListener('click',() =>
@@ -156,6 +155,10 @@ closeModalButtons.forEach(btn =>
         closeModal(modal);
     });
 });
+    
+
+  
+
  function openModal(modal)
  {
      if (modal === null) return;
