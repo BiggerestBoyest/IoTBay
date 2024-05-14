@@ -135,9 +135,10 @@ public class DBManager
         statement.executeUpdate(query);
     }       
 
-    public void DeleteCustomer(String email) throws SQLException
+    public void DeleteCustomer(int customerID) throws SQLException
     {
-        String query = "DELETE EFROM USERDB.Customers WHERE EMAIL='" + email + "'";
+        String query = "UPDATE USERDB.Customers SET GIVENNAME =" + "NULL" + ",SURNAME=" + "NULL"  + ",PASSWORD=" + "NULL"  + ",EMAIL=" + "NULL"  + ",DOB=" + "NULL"  + " , ADDRESS =" + "NULL"  + " , PAYMENTDETAILS=" + "NULL"  + ", PHONE=" + "NULL"  +  " WHERE ID=" + customerID;
+        //String query = "DELETE FROM USERDB.Customers WHERE ID= " + customerID ;
         statement.executeUpdate(query);
     }
     
@@ -195,6 +196,8 @@ public class DBManager
     {       
         String query = "UPDATE USERDB.ACCESSLOGS SET LOGOUT_DATE='" + logoutDate + "',LOGOUT_TIME='" + logoutTime +  "' WHERE LOG_ID=" + logID + "" + "AND FK_CUSTOMERID=" + customerID;
         statement.executeUpdate(query);
+        
+        
     }     
     
     public int GenerateUniqueID()

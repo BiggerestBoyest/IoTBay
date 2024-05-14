@@ -30,6 +30,11 @@
            <servlet-class>com.isd.iotbay.controller.AccessLogServlet</servlet-class>
            <load-on-startup>0</load-on-startup>
        </servlet>
+          <servlet>
+           <servlet-name>RemoveCustomerServlet</servlet-name>
+           <servlet-class>com.isd.iotbay.controller.RemoveCustomerServlet</servlet-class>
+           <load-on-startup>0</load-on-startup>
+       </servlet>
        <servlet-mapping>
            <servlet-name>ConnServlet</servlet-name>
            <url-pattern>/ConnServlet</url-pattern>
@@ -54,6 +59,10 @@
            <servlet-name>AccessLogServlet</servlet-name>
            <url-pattern>/AccessLogServlet</url-pattern>
         </servlet-mapping>  
+            <servlet-mapping>
+           <servlet-name>RemoveCustomerServlet</servlet-name>
+           <url-pattern>/RemoveCustomerServlet</url-pattern>
+        </servlet-mapping> 
        <session-config>
            <session-timeout>
                30

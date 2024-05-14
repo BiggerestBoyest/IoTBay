@@ -28,6 +28,119 @@ input[type=button],input[type=submit]
  
 }
 
+.modal
+{
+    position: fixed;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    border: 1px solid black;
+    border-color:#ff914c;
+    border-radius: 10px;
+    z-index: 10;
+    background-color: white;
+    width: 700px;
+    max-width: 80%;
+    
+}
+
+.modal.active
+{
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header
+{
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px;
+    border-color: #ff914c;
+}
+
+.modal-header .title
+{
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.modal-header .close-button
+{
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.modal-buttons
+{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 15px;
+}
+.modal-buttons .cancel-registration-button
+{
+    height: 50px;
+    width: 200px;
+    background-color: #ff9999;
+    cursor: pointer;
+
+}
+
+.modal-buttons .close-button
+{
+    height: 50px;
+    width: 200px;
+    background-color: #ff9966;
+    cursor: pointer;
+
+}
+
+.modal-body
+{
+    padding: 10px 15px;
+}
+
+#overlay
+{
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    pointer-events: none;
+}
+
+#overlay.active 
+{
+    opacity: 1;
+    pointer-events: all;
+}
+
+#cancelBtn
+{
+ border-color: #f44336;
+  color: red;
+/*  padding: 15px 32px;*/
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  width:200px;
+  height:50px;
+}
+
+#cancelBtn:hover
+{
+    background-color:red;
+    color:black;
+}
+
 #logBtn:hover{
       background-color:#000000; 
 }
