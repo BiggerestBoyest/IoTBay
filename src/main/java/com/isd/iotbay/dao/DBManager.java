@@ -68,6 +68,34 @@ public class DBManager
        return logs;   
     }
      
+       public ArrayList<AccessLog> ReadAllLogsFromCustomerByDate(int customerID, String date) throws SQLException 
+    {   
+        String query = "SELECT * FROM USERDB.ACCESSLOGS WHERE FK_CUSTOMERID= " + customerID + " AND LOGIN_DATE='" + date + "'";
+        ResultSet set = statement.executeQuery(query);
+        ArrayList<AccessLog> logs = new ArrayList<>();
+
+        while(set.next())
+        {
+            int queriedCustomerID = set.getInt(6);
+
+            if(customerID == queriedCustomerID)
+            {
+                int logID = set.getInt(1);
+                String loginDate = set.getString(2);
+                String loginTime = set.getString(3);
+                String logoutDate = set.getString(4);
+                String logoutTime = set.getString(5);
+                AccessLog log = new AccessLog(logID,queriedCustomerID,loginDate,loginTime,logoutDate,logoutTime);
+                logs.add(log);
+            }
+        }
+
+       return logs;   
+    }
+     
+     
+     
+     
        public ArrayList<AccessLog> ReadAllLogs() throws SQLException 
     {   
         String query = "SELECT * FROM USERDB.ACCESSLOGS";

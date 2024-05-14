@@ -44,6 +44,8 @@ public class EditServlet extends HttpServlet
         if(streetAddress.equals("") || streetType.equals("") || state.equals("") || postcode == -1 || streetNumber == -1)
         {
             address = customer.GetAddress();
+            currentSession.setAttribute("emailError","Address not updated. Not all fields completed or valid");
+
         } else 
         {
             address =  streetNumber + " " + streetAddress + " " + streetType + " " + state + " " + postcode;
@@ -51,23 +53,26 @@ public class EditServlet extends HttpServlet
         
         if(cardNumber == -1 || expiryDate.equals("") || cvv == -1)
         {
+            currentSession.setAttribute("emailError","Payment Details not updated. Not all fields completed or valid.");
             paymentDetails = customer.GetPaymentDetails();
         } else 
         {
+            
             paymentDetails = cardNumber + " " + expiryDate + " " + cvv;
         }
-                           System.out.println(" error on updating customer");
 
         validator.ClearErrors(currentSession);
         
      
-            if (!validator.ValidateEmail(email)) 
+            if (!validator.ValidateEmail(email) || email.equals("")) 
             {
+                currentSession.setAttribute("editStatus","");
                 currentSession.setAttribute("emailError", "Email invalid, please try again.");
                 request.getRequestDispatcher("EditProfile.jsp").forward(request,response);
             }
-         else if (!validator.ValidatePassword(password)) 
+         else if (!validator.ValidatePassword(password) || password.equals("")) 
         {
+            currentSession.setAttribute("editStatus","");
             currentSession.setAttribute("passwordError", "Password invalid, please try again.");
             request.getRequestDispatcher("EditProfile.jsp").forward(request,response);
         } else if (customer != null)
@@ -82,8 +87,6 @@ public class EditServlet extends HttpServlet
                System.out.println(ex + " error on updating customer");
             }
             
-                           System.out.println(" error on updating customer");
-                           
                
             currentSession.setAttribute("customer",customer);
             currentSession.setAttribute("editStatus","Profile updated successfully!");

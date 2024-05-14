@@ -3,7 +3,7 @@ body
     background-color: #f2f2f2;
 }
 
-input[type=button],input[type=submit]
+input[type=button],input[type=submit] 
 {
   background-color:#ff914c; 
   border: none;
@@ -14,7 +14,24 @@ input[type=button],input[type=submit]
   display: inline-block;
   font-size: 16px;
 }
-input[type=button]:hover,input[type=submit]:hover
+
+#logBtn
+{
+    background-color:#ff914c; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+ 
+}
+
+#logBtn:hover{
+      background-color:#000000; 
+}
+input[type=button]:hover,input[type=submit]:hover 
 {
   background-color:#000000; 
 }
@@ -29,7 +46,7 @@ input[type=button]:focus,input[type=submit]:focus
   background-color: #f2f2f2; 
   color: black;
 }
-table
+.customerForm
 {
     overflow:hidden;
     margin: auto;
@@ -63,12 +80,41 @@ input[type=text]:focus,input[type=date]:focus,input[type=password]:focus,input[t
 
 
 
-td,tr
+#accessTable
 {
-    
+    margin-right:auto;
+    margin-left:0px;
+}
+
+#accessTable th 
+{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #04AA6D;
+  color: white;
+}
+
+/*td,tr
+{
+    width: 1000px;
     height: 100px;
     overflow: hidden;
+}*/
+
+
+#accessTable tr td
+{
+    width: 1000px;
+    height: 30px;
+    overflow: hidden;
 }
+
+#accessTable tr:nth-child(odd) td
+{
+    background-color: white;
+}
+
+
 input[required=true]
 {
     padding: 10px;
@@ -117,6 +163,8 @@ input[required=true]
 thead{
     background-color: #ff914c;
 }
+
+
 
 .dropdown-content
 {
