@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author jogun
  */
-public class AddProductToOrderServlet  extends HttpServlet{
+public class SaveOrderServlet  extends HttpServlet{
 //     private DBManager manager;
 //    private DBConnector Connector;
     
@@ -33,37 +33,43 @@ public class AddProductToOrderServlet  extends HttpServlet{
             throws ServletException, IOException {
 
  
-        HttpSession session = request.getSession();
+       HttpSession session = request.getSession();
         //retrieve the product name that was searched for by the user
         DBManager manager = (DBManager) session.getAttribute("manager");
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
-        ArrayList<Product> products = new ArrayList();
-        session.setAttribute("addedProduct", null);
+        String saveOrder = request.getParameter("saveOrder");
+        request.setAttribute("saveSubmitOrder", null);
         
-        try
-        {
-            products = manager.showCollection();
-            
-            for(Product product : products)
+            try
             {
-                if(request.getParameter(Integer.toString(product.getProduct_ID())) != null)
+                if(customer != null)
                 {
-                    order.AddProduct(product);
-                   // manager.AddProductToOrder(order.GetID(), product.getProduct_ID());
-                    session.setAttribute("addedProduct", product.getProduct_name() + " was added to your order.");
-                    break;
+                    manager.CreateCustomerOrder(order.GetID(), customer.GetID());
+                } else if (staff != null)
+                {
+                    order.SetStaffID(staff.GetID());
+                    manager.CreateCustomerOrder(order.GetID(), customer.GetID());
+                } else 
+                {
+                    int guestID = manager.GenerateNewGuestID();
+                    manager.CreateGuestOrder(order.GetID(), guestID);
                 }
+
+                for(Product product : order.GetProducts())
+                {
+                    manager.AddProductToOrder(order.GetID(), product.getProduct_ID());
+                }
+
+
             }
-            
-        } catch(SQLException ex){System.out.println(ex);}
-        
-        session.setAttribute("currentOrder", order);
-        request.getRequestDispatcher("Order.jsp").forward(request, response);
-  
-        
-        
-        
+             catch(SQLException ex)
+            {
+                System.out.println(ex);
+            }
+
+            session.setAttribute("saveSubmitOrder", "Your Order has been successfully saved.");
+            request.getRequestDispatcher("Order.jsp").forward(request,response);
     }
 }

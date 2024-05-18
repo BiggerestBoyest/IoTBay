@@ -29,7 +29,7 @@ public class OrderServlet  extends HttpServlet{
 //    private DBConnector Connector;
     
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
  
@@ -40,16 +40,33 @@ public class OrderServlet  extends HttpServlet{
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = null;
-        
-        if(customer != null)
+        try
         {
-            try
+            int orderID = manager.GenerateNewOrderID();
+            order = new Order(orderID);
+
+            if(customer != null)
             {
-                order = manager.ShowAllCustomerOrders(customer.GetID());
-            } catch (SQLException ex){}
+                order.SetCustomerID(customer.GetID());
+               // manager.CreateCustomerOrder(orderID, customer.GetID());
+            } else if (staff != null)
+            {
+                order.SetStaffID(staff.GetID());
+                //manager.CreateCustomerOrder(orderID, customer.GetID());
+            } else 
+            {
+                int guestID = manager.GenerateNewGuestID();
+                order.SetGuestID(guestID);
+               // manager.CreateGuestOrder(orderID, guestID);
+            }
+        }
+         catch(SQLException ex)
+        {
+            System.out.println(ex);
         }
         
-        
+        session.setAttribute("currentOrder", order);
+        request.getRequestDispatcher("Order.jsp").forward(request,response);
         
     }
 }

@@ -496,23 +496,101 @@ public ArrayList<Product> showCollection() throws SQLException {
 
 public ArrayList<Product> ShowAllCustomerOrders(int customerID) throws SQLException 
 {
-        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_ID WHERE CUSTOMER_ID=" + customerID;
+        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_NAME WHERE CUSTOMER_ID=" + customerID;
         return ShowAllOrders(query);
 }
 
 public ArrayList<Product> ShowAllStaffOrders(int staffID) throws SQLException 
 {
-        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_ID WHERE STAFF_ID=" + staffID;
+        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_NAME WHERE STAFF_ID=" + staffID;
         return ShowAllOrders(query);
 }
 
 public ArrayList<Product> ShowAllGuestOrders(int guestID) throws SQLException 
 {
-        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_ID WHERE GUEST_ID=" + guestID;
+        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_NAME WHERE GUEST_ID=" + guestID;
         return ShowAllOrders(query);
 }
 
 
+
+
+public void CreateCustomerOrder(int orderID, int customerID) throws SQLException 
+{
+    String query = "INSERT INTO USERDB.Orders (ORDER_ID,FK_CUSTOMER_ID)" + " VALUES (" + orderID + ", " + customerID +  ")";
+    statement.executeUpdate(query);
+}
+
+public void CreateStaffOrder(int orderID,int staffID) throws SQLException 
+{
+     String query = "INSERT INTO USERDB.Orders (ORDER_ID,FK_STAFF_ID)" + " VALUES (" + orderID + ", " + staffID +  ")";
+    statement.executeUpdate(query);
+}
+
+public void CreateGuestOrder(int orderID, int guestID) throws SQLException 
+{
+     String query = "INSERT INTO USERDB.ORDERS (ORDER_ID, GUEST_ID)" + " VALUES (" + orderID + ", " + guestID +  ")";
+     System.out.println("creating guest");
+    statement.executeUpdate(query);
+}
+
+public int GenerateNewGuestID() throws SQLException 
+{
+    String query = "SELECT * FROM USERDB.ORDER_PRODUCT";
+    ResultSet rs = statement.executeQuery(query);
+    int count = 0;
+    
+    while(rs.next())
+        count++;
+    
+    return count + 1; 
+}
+
+
+public int GenerateNewOrderID() throws SQLException 
+{
+    String query = "SELECT * FROM USERDB.ORDERS";
+    ResultSet rs = statement.executeQuery(query);
+    int count = 0;
+    
+    while(rs.next())
+        count++;
+    
+    return count + 1; 
+}
+
+public void AddProductToOrder(int orderID, int productID) throws SQLException
+{
+     String query = "SELECT * USERDB.ORDER_PRODUCT WHERE ORDER_ID=" + orderID + " AND PRODUCT_ID=" + productID;
+     ResultSet set = statement.executeQuery(query);
+     boolean foundProductInOrder = false;
+     int quantity = 0;
+     while(set.next())
+     {
+         int queriedID = set.getInt(1);
+         int queriedProductID = set.getInt(2);
+         quantity = set.getInt(3);
+         
+         if(queriedID == orderID && productID == queriedProductID)
+         {
+            quantity++;
+            foundProductInOrder = true;
+            break;
+         }
+     }
+     
+     if(!foundProductInOrder)
+     {
+             String updateQuery = "INSERT INTO USERDB.ORDER_PRODUCT (ORDER_ID, PRODUCT_ID, QUANTITY)" + " VALUES (" + orderID + ", " + productID +  ", " + 1 +  ")";
+            statement.executeUpdate(query);
+     }
+ 
+}
+
+public void UpdateCustomerOrder(int order, int customerID, String timeOfOrder, String deliveryAddress, String dateOfOrder) throws SQLException
+{
+    String query = "SELECT * FROM USERDB.ORDERS ";
+}
 
 
 private ArrayList<Product> ShowAllOrders(String query) throws SQLException {

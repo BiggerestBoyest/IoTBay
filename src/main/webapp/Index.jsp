@@ -74,7 +74,7 @@
             <div id="buttonContainer">
                 <table>
                     <a href="Collection_search.jsp">Search product</a>
-                    <a href="Order.jsp">Start Order</a>
+                    <a href="OrderServlet">Start Order</a>
 
             <%
                 if (products != null){

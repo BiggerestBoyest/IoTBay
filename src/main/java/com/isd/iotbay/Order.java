@@ -40,6 +40,8 @@ public class Order
         _products = new ArrayList();
     }
     
+    public ArrayList<Product> GetProducts(){return _products;}
+    public int GetID(){return _orderID;}
     public void SetCustomerID(int newID) {_customerID = newID;}
     public void SetStaffID(int newID) {_staffID = newID;}
     public void SetGuestID(int newID) {_guestID = newID;}

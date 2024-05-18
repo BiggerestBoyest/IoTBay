@@ -42,7 +42,9 @@
                 AccessLog currentLog = (AccessLog)session.getAttribute("currentLog");
                 Staff staff = (Staff)session.getAttribute("staff");
                 ArrayList<Product> products = (ArrayList<Product>)session.getAttribute("allProducts");
-                ArrayList<Order> orders = (ArrayList<Order>) session.getAttribute("allUserOrders");
+                Order order = (Order) session.getAttribute("currentOrder");
+                String addedProduct = (String)session.getAttribute("addedProduct");
+                String saveSubmitOrder = (String)session.getAttribute("saveSubmitOrder");
     %>
     <div class="header">
              <img src="css/IOTBAY Logo.png">
@@ -52,7 +54,6 @@
                     <a href ="#">Show Orders</a>
                     <a href ="AccessLogServlet">Edit Profile</a>
                     <a href ="LogoutServlet">Logout</a>
-                    <a href ="Order.jsp">Cart (<%=orders == null ? 0 : orders.size()%>)</a>
                     <% if (staff != null){ %>
                     <a href ="Collection_add.jsp">Add Product</a>
                     <%}%>
@@ -74,13 +75,16 @@
             <div id="buttonContainer">
                 <table>
                     <a href="Collection_search.jsp">Search product</a>
+                    
+                    <form action="AddProductToOrderServlet" method="post">
             <%
                 if (products != null){
                     for (Product pro : products){
             %>
             
             <tr>
-                <td><a hre<p><%=pro.getProduct_ID()%></p></td>
+                <td><input type="submit" name="<%=pro.getProduct_ID()%>" value="<%=pro.getProduct_ID()%>"></td>
+                <td><p><%=pro.getProduct_ID()%></p></td>
                 <td><p><%=pro.getProduct_name()%></p></td>
                 <td><p><%=pro.getCost()%></p></td>
                 <td><p><%=Integer.toString(pro.getProduct_stock())%></p></td>
@@ -88,9 +92,27 @@
                         
             </tr>
                 <%}}%>
-                            
+                         </form>   
                 </table>
+        <span><%=(addedProduct != null ? addedProduct : "")%></span>
             </div>
+            <h2> Your Current Order</h2>
+            <table>
+            <%
+                if (order != null){
+                    for (Product pro : order.GetProducts()){
+            %>
+            
+            <tr>
+                <td><h5><%=pro.getProduct_name()%></h5></td>
+                        
+            </tr>
+                <%}}%>
+                </table>
+                <div>
+                    <a href="SaveOrderServlet">Save Order</a>
+                <span><%=(saveSubmitOrder != null ? saveSubmitOrder : "")%></span>
+                </div>
         </div>
    </body>
 </html>
