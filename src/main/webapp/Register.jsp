@@ -57,6 +57,8 @@
                 <table>
                     <tr><td><input type="submit"  value ="Register"></td></tr>
                     <tr><td id="btnRegister">Already have an account. Sign in <a href="Login.jsp">here</a></td></tr>
+                    <tr><td id="btnRegister">Register as a staff <a href="StaffRegister.jsp">here</a></td></tr>
+
                 </table>
               
             </div>

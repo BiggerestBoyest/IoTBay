@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet
         String email = request.getParameter("email");
         String password  = request.getParameter("password");
         DBManager manager = (DBManager)currentSession.getAttribute("manager");
-            currentSession.setAttribute("staff",null);
+        currentSession.setAttribute("staff",null);
         Customer customer = null;
         AccessLog log = null;
         validator.ClearErrors(currentSession);

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.isd.iotbay.Customer;
+import com.isd.iotbay.Staff;
 import com.isd.iotbay.AccessLog;
 
 import com.isd.iotbay.dao.DBManager;
@@ -21,10 +22,16 @@ public class AccessLogServlet extends HttpServlet
         HttpSession currentSession = request.getSession();
         DBManager manager = (DBManager)currentSession.getAttribute("manager");
         Customer customer = (Customer)currentSession.getAttribute("customer");
+        Staff staff = (Staff)currentSession.getAttribute("staff");
         ArrayList<AccessLog> logs = new ArrayList();
+        System.out.println("ID++++ " + staff.GetID());
         try
         {   
-            logs = manager.ReadAllLogsFromCustomer(customer.GetID());
+            if (customer != null)
+                logs = manager.ReadAllLogsFromCustomer(customer.GetID());
+            else
+                logs = manager.ReadAllLogsFromStaff(staff.GetID());
+            
             currentSession.setAttribute("allLogs", logs);
         } catch (SQLException ex)
         {
@@ -32,8 +39,6 @@ public class AccessLogServlet extends HttpServlet
         }
         
         request.getRequestDispatcher("EditProfile.jsp").forward(request, response);
-
-        
     }
     
     @Override
@@ -42,6 +47,7 @@ public class AccessLogServlet extends HttpServlet
         HttpSession currentSession = request.getSession();
         DBManager manager = (DBManager)currentSession.getAttribute("manager");
         Customer customer = (Customer)currentSession.getAttribute("customer");
+        Staff staff = (Staff)currentSession.getAttribute("staff");
         String date = request.getParameter("logFilter");
         currentSession.setAttribute("logError", "");
 
@@ -58,11 +64,19 @@ public class AccessLogServlet extends HttpServlet
         try
         {  
             System.out.println(date);
-            logs = manager.ReadAllLogsFromCustomerByDate(customer.GetID(),date);
+            
+            if(customer!=null)
+                logs = manager.ReadAllLogsFromCustomerByDate(customer.GetID(),date);
+            else
+                logs=manager.ReadAllLogsFromStaffByDate(staff.GetID(),date);
             
             if(logs.size() <= 0) //Alternate case if no value is found by the date, then return all logs instead as a way to "reset" the table
             {
-                logs = manager.ReadAllLogsFromCustomer(customer.GetID());
+                if(customer!=null)
+                    logs = manager.ReadAllLogsFromCustomer(customer.GetID());
+                else
+                    logs = manager.ReadAllLogsFromStaff(staff.GetID());
+
                 currentSession.setAttribute("logError", "The date had no logs associated with it.");
 
             }
@@ -76,5 +90,7 @@ public class AccessLogServlet extends HttpServlet
         request.getRequestDispatcher("EditProfile.jsp").forward(request, response);
 
     }
+    
+  
 
 }

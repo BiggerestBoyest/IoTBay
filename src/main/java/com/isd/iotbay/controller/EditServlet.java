@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.isd.iotbay.Customer;
+import com.isd.iotbay.Staff;
 import com.isd.iotbay.AccessLog;
 
 import com.isd.iotbay.dao.DBManager;
@@ -24,12 +25,14 @@ public class EditServlet extends HttpServlet
         Validator validator = new Validator();
         DBManager manager = (DBManager)currentSession.getAttribute("manager");
         Customer customer = (Customer)currentSession.getAttribute("customer");
-        String email = request.getParameter("email").equals("") ? customer.GetEmail() : request.getParameter("email") ;
-        String password  = request.getParameter("password");
+        Staff staff = (Staff)currentSession.getAttribute("staff");
+        
+        String email = request.getParameter("email").equals("") ? customer != null ? customer.GetEmail(): staff.GetEmail() : request.getParameter("email") ;
+        String password  = request.getParameter("password").equals("") ? customer != null ? customer.GetPassword() : staff.GetPassword() : request.getParameter("password");
         String firstName  = request.getParameter("fname");
-        String lastName  = request.getParameter("lname").equals("") ? customer.GetLastName() : request.getParameter("lname") ;
-        String dob  = request.getParameter("dob").equals("") ? customer.GetDOB() : request.getParameter("dob") ;
-        String phone  = request.getParameter("phone").equals("") ? customer.GetPhone() : request.getParameter("phone") ;
+        String lastName  = request.getParameter("lname");
+        String dob  = request.getParameter("dob");
+        String phone  = request.getParameter("phone");
         int streetNumber  = request.getParameter("streetNumber").equals("") ? -1 : Integer.parseInt(request.getParameter("streetNumber"));
         String streetAddress  = request.getParameter("streetAddress");
         String streetType  = request.getParameter("streetType");
@@ -43,7 +46,11 @@ public class EditServlet extends HttpServlet
         
         if(streetAddress.equals("") || streetType.equals("") || state.equals("") || postcode == -1 || streetNumber == -1)
         {
-            address = customer.GetAddress();
+            if(customer != null)
+                address = customer.GetAddress();
+            else
+                address = staff.GetAddress();
+            
             currentSession.setAttribute("emailError","Address not updated. Not all fields completed or valid");
 
         } else 
@@ -54,7 +61,10 @@ public class EditServlet extends HttpServlet
         if(cardNumber == -1 || expiryDate.equals("") || cvv == -1)
         {
             currentSession.setAttribute("emailError","Payment Details not updated. Not all fields completed or valid.");
-            paymentDetails = customer.GetPaymentDetails();
+            if(customer != null)
+                paymentDetails = customer.GetPaymentDetails();
+            else
+                paymentDetails = staff.GetPaymentDetails();
         } else 
         {
             
@@ -91,7 +101,23 @@ public class EditServlet extends HttpServlet
             currentSession.setAttribute("customer",customer);
             currentSession.setAttribute("editStatus","Profile updated successfully!");
             request.getRequestDispatcher("EditProfile.jsp").forward(request,response);
-        } 
+        } else if(staff != null)
+        {
+             try
+            {
+                manager.UpdateStaff(staff.GetID(),firstName, lastName,email, password, address, paymentDetails,dob,phone);
+                staff = manager.ReadStaff(email, password);
+
+            } catch (SQLException ex)
+            {
+               System.out.println(ex + " error on updating customer");
+            }
+            
+               
+            currentSession.setAttribute("staff",staff);
+            currentSession.setAttribute("editStatus","Profile updated successfully!");
+            request.getRequestDispatcher("EditProfile.jsp").forward(request,response);
+        }
         
     }
 

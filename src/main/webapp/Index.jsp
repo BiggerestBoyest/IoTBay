@@ -36,7 +36,7 @@
         <div id="content">
             <div id="buttonContainer">
                 <table>
-                    <tr><td><a href="Login.jsp" id="buttons"> Login</a></td></tr><p></p>
+                    <tr><td><a href="Collection_manage.jsp" id="buttons"> Login</a></td></tr><p></p>
                     <tr><td><a href="Register.jsp" id="buttons" >Register</td></tr></a>
                 </table>
             </div>

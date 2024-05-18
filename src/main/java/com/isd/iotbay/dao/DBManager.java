@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 import com.isd.iotbay.AccessLog;
+import com.isd.iotbay.Product;
 
 public class DBManager 
 {
@@ -70,6 +71,32 @@ public class DBManager
        return logs;   
     }
      
+      
+     public ArrayList<AccessLog> ReadAllLogsFromStaff(int staffID) throws SQLException 
+    {   
+        String query = "SELECT * FROM USERDB.ACCESSLOGS WHERE FK_STAFF_ID= " + staffID;
+        ResultSet set = statement.executeQuery(query);
+        ArrayList<AccessLog> logs = new ArrayList<>();
+
+        while(set.next())
+        {
+            int queriedStaffID = set.getInt(7);
+
+            if(staffID == queriedStaffID)
+            {
+                int logID = set.getInt(1);
+                String loginDate = set.getString(2);
+                String loginTime = set.getString(3);
+                String logoutDate = set.getString(4);
+                String logoutTime = set.getString(5);
+                AccessLog log = new AccessLog(logID,loginDate,loginTime,logoutDate,logoutTime, queriedStaffID);
+                logs.add(log);
+            }
+        }
+
+       return logs;   
+    }
+     
        public ArrayList<AccessLog> ReadAllLogsFromCustomerByDate(int customerID, String date) throws SQLException 
     {   
         String query = "SELECT * FROM USERDB.ACCESSLOGS WHERE FK_CUSTOMERID= " + customerID + " AND LOGIN_DATE='" + date + "'";
@@ -94,6 +121,31 @@ public class DBManager
 
        return logs;   
     }
+       
+    public ArrayList<AccessLog> ReadAllLogsFromStaffByDate(int staffID, String date) throws SQLException 
+    {   
+        String query = "SELECT * FROM USERDB.ACCESSLOGS WHERE FK_STAFF_ID= " + staffID + " AND LOGIN_DATE='" + date + "'";
+        ResultSet set = statement.executeQuery(query);
+        ArrayList<AccessLog> logs = new ArrayList<>();
+
+        while(set.next())
+        {
+            int queriedStaffID = set.getInt(7);
+
+            if(staffID == queriedStaffID)
+            {
+                int logID = set.getInt(1);
+                String loginDate = set.getString(2);
+                String loginTime = set.getString(3);
+                String logoutDate = set.getString(4);
+                String logoutTime = set.getString(5);
+                AccessLog log = new AccessLog(logID,loginDate,loginTime,logoutDate,logoutTime,queriedStaffID);
+                logs.add(log);
+            }
+        }
+
+       return logs;   
+    }
      
      
      
@@ -112,7 +164,8 @@ public class DBManager
                 String logoutDate = set.getString(4);
                 String logoutTime = set.getString(5);
                 int customerID = set.getInt(6);
-                AccessLog log = new AccessLog(logID,customerID,loginDate,loginTime,logoutDate,logoutTime);
+                int staffID = set.getInt(7);
+                AccessLog log = new AccessLog(logID,customerID,staffID,loginDate,loginTime,logoutDate,logoutTime);
                 logs.add(log);
         }
 
@@ -122,6 +175,12 @@ public class DBManager
     public void AddCustomer(int ID, String givenName, String surname,String email, String password, String dob, String phoneNumber) throws SQLException 
     {               
         String query = "INSERT INTO USERDB.Customers (ID,GIVENNAME,SURNAME,EMAIL,PASSWORD,PHONE,DOB)" + " VALUES (" + ID + ", '" + givenName +  "', '"  + surname + "', '" +   email + "', '" + password + "', '" + phoneNumber + "', '" + dob + "')";
+        statement.executeUpdate(query);
+    }
+    
+     public void AddStaff(int ID, String givenName, String surname,String email, String password, String dob, String phoneNumber) throws SQLException 
+    {               
+        String query = "INSERT INTO USERDB.Staff (STAFF_ID,GIVENNAME,SURNAME,EMAIL,PASSWORD,PHONE,DOB)" + " VALUES (" + ID + ", '" + givenName +  "', '"  + surname + "', '" +   email + "', '" + password + "', '" + phoneNumber + "', '" + dob + "')";
         statement.executeUpdate(query);
     }
 
@@ -136,6 +195,12 @@ public class DBManager
         String query = "UPDATE USERDB.Customers SET GIVENNAME ='" + givenName + "',SURNAME='" + surname + "',PASSWORD='" + password + "',EMAIL='" + email + "',DOB='" + dob + "' , ADDRESS ='" + address + "' , PAYMENTDETAILS='" + paymentDetails + "', PHONE='" + phone +  "' WHERE ID=" + customerID;
         statement.executeUpdate(query);
     }       
+    
+      public void UpdateStaff(int staffID, String givenName, String surname, String email, String password, String address, String paymentDetails, String dob, String phone ) throws SQLException 
+    {       
+        String query = "UPDATE USERDB.Staff SET GIVENNAME ='" + givenName + "',SURNAME='" + surname + "',PASSWORD='" + password + "',EMAIL='" + email + "',DOB='" + dob + "' , ADDRESS ='" + address + "' , PAYMENTDETAILS='" + paymentDetails + "', PHONE='" + phone +  "' WHERE STAFF_ID=" + staffID;
+        statement.executeUpdate(query);
+    }      
 
     public void DeleteCustomer(int customerID) throws SQLException
     {
@@ -144,6 +209,12 @@ public class DBManager
         statement.executeUpdate(query);
     }
     
+     public void DeleteStaff(int staffID) throws SQLException
+    {
+        String query = "UPDATE USERDB.Staff SET GIVENNAME =" + "NULL" + ",SURNAME=" + "NULL"  + ",PASSWORD=" + "NULL"  + ",EMAIL=" + "NULL"  + ",DOB=" + "NULL"  + " , ADDRESS =" + "NULL"  + " , PAYMENTDETAILS=" + "NULL"  + ", PHONE=" + "NULL"  +  " WHERE STAFF_ID=" + staffID;
+        statement.executeUpdate(query);
+    }
+     
     public ArrayList<Customer> GetAllCustomers() throws SQLException
     {
         String query = "SELECT * FROM CUSTOMERS";
@@ -166,6 +237,27 @@ public class DBManager
         return customers;
     }
     
+     public ArrayList<Staff> GetAllStaff() throws SQLException
+    {
+        String query = "SELECT * FROM STAFF";
+        ResultSet set = statement.executeQuery(query);
+        ArrayList<Staff> staffs = new ArrayList<>();
+        
+        while(set.next())
+        {
+            String givenName = set.getString(2);
+            String surname = set.getString(3);
+            String email = set.getString(8);
+            String password = set.getString(9);
+            String dob = set.getString(5);
+            String phone = set.getString(9);
+            Staff staff = new Staff(givenName,surname,email,password,dob,phone);
+            staffs.add(staff);
+        }
+        
+        return staffs;
+    }
+    
     public void GenerateNewAccessLog(int logID, int customerID, String loginDate, String loginTime) throws SQLException
     {
         
@@ -178,7 +270,7 @@ public class DBManager
       public void GenerateNewAccessLog(int logID,  String loginDate, String loginTime, int staffID) throws SQLException
     {
         
-        String subquery = "SELECT ID FROM USERDB.Staff WHERE STAFF_ID= " + staffID;
+        String subquery = "SELECT STAFF_ID FROM USERDB.Staff WHERE STAFF_ID= " + staffID;
         String query = "INSERT INTO USERDB.ACCESSLOGS (LOG_ID, FK_STAFF_ID, LOGIN_DATE, LOGIN_TIME)" + " VALUES (" + logID + ", " + "(" + subquery + ")"  + ", '" + loginDate +  "', '"  + loginTime + "')";
         System.out.println(logID + " log id");
         statement.executeUpdate(query);
@@ -209,6 +301,12 @@ public class DBManager
         statement.executeUpdate(query);
     }     
     
+       public void UpdateAccessLog(int logID, String logoutDate, String logoutTime, int staffID) throws SQLException 
+    {       
+        String query = "UPDATE USERDB.ACCESSLOGS SET LOGOUT_DATE='" + logoutDate + "',LOGOUT_TIME='" + logoutTime +  "' WHERE LOG_ID=" + logID + "" + "AND FK_STAFF_ID=" + staffID;
+        statement.executeUpdate(query);
+    }     
+    
     public Staff ReadStaff(String email, String password) throws SQLException
     {
         String query = "SELECT * FROM USERDB.Staff WHERE EMAIL= '" + email + "' and PASSWORD='" + password  + "'";
@@ -217,17 +315,17 @@ public class DBManager
         while(set.next())
         {
             int staffID = set.getInt(1);
-            String staffEmail = set.getString(4);
-            String staffPassword = set.getString(5);
+            String staffEmail = set.getString(8);
+            String staffPassword = set.getString(9);
 
             if(staffEmail.equals(email) && staffPassword.equals(staffPassword))
             {
                 String staffGivenName = set.getString(2);
                 String staffSurname = set.getString(3);
-                String staffDOB = set.getString(7);
-                String staffPhone = set.getString(6);
-                String staffAddress = set.getString(8);
-                String staffPaymentDetails = set.getString(9);
+                String staffDOB = set.getString(5);
+                String staffPhone = set.getString(4);
+                String staffAddress = set.getString(6);
+                String staffPaymentDetails = set.getString(7);
 
                 Staff staff = new Staff(staffID,staffGivenName, staffSurname,staffEmail,staffPassword,staffDOB,staffPhone,staffAddress,staffPaymentDetails);
                 return staff;
@@ -273,6 +371,134 @@ public class DBManager
         
     }
 
+      public int GenerateUniqueStaffID()
+    {
+        ArrayList<Staff> staff = new ArrayList();
+        try
+        {
+           staff = GetAllStaff();
+        } catch (SQLException ex)
+        {
+            System.out.println(ex + " sql error");
+        }
+        
+        Random random = new Random();
+        int value = 0;
+        boolean duplicateFound = false;
+        
+        while(true)
+        {
+            value = random.nextInt(9999);
+
+            for(int i = 0; i < staff.size(); i++)
+            {
+                if (staff.get(i).GetID() == value)
+                {
+                    duplicateFound = true;
+                    break;
+                }
+                    
+            }
+            
+            if(!duplicateFound)
+                return value;
+            
+        }
+        
+    }
+            
+    public void addProduct(String product_name, double cost, int stock, String product_deliveryDate) throws SQLException 
+    {
+
+    int temp = 0;
+    String query = "INSERT INTO USERDB.PRODUCTS VALUES ("+temp+",'"+product_name+"', "+cost+", "+stock+", '"+product_deliveryDate+"')";
+    statement.executeUpdate(query);
+
+    String getid = "UPDATE USERDB.PRODUCTS SET PRODUCT_ID = (SELECT MAX(PRODUCT_ID) FROM USERDB.PRODUCTS) + 1 WHERE PRODUCT_ID = 0";
+    statement.executeUpdate(getid);
+}
+
+public void deleteItem(String Product_name) throws SQLException {
+    String query = "DELETE FROM USERDB.PRODUCTS WHERE (PRODUCT_NAME) = ('"+Product_name+"')";
+    statement.executeUpdate(query);
+}
+
+public void updateItem(int Product_id, String Product_name,  double cost, int Product_stock, String Product_deliveryDate) throws SQLException {        
+    String query = "UPDATE USERDB.PRODUCTS SET PRODUCT_NAME = ('"+Product_name+"'), PRODUCT_COST = ("+cost+"), PRODUCT_STOCK = ("+Product_stock+"), PRODUCT_DELIVERYDATE = ('"+Product_deliveryDate+"') WHERE PRODUCT_ID = ("+Product_id+")";
+    statement.executeUpdate(query);
+
+}
+
+public boolean checkItem(String Product_name) throws SQLException {
+    String query = "SELECT * FROM USERDB.PRODUCTS WHERE (PRODUCT_NAME) = '"+Product_name+"'";
+    ResultSet rs = statement.executeQuery(query);
+        System.out.println(Product_name + "<- NAME");
+
+    while (rs.next()) {
+        String item_productname = rs.getString(2);
+        System.out.println(Product_name + "<- NAME QUERY_NAME ->" + item_productname);
+        if (item_productname.equals(Product_name)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+public int fetchProductid(String Product_name) throws SQLException {
+    String query = "SELECT PRODUCT_ID FROM USERDB.PRODUCTS WHERE PRODUCT_NAME = '"+Product_name+"'";
+    ResultSet rs = statement.executeQuery(query);
+    int productid = 0;
+
+    while (rs.next()) {
+        productid = rs.getInt(1);
+    }
+    //return null;
+    return productid;
+}
+
+public Product fetchProduct(String Product_name) throws SQLException {
+    String query = "SELECT * FROM userdb.PRODUCTS WHERE (PRODUCT_NAME) = '"+Product_name+"'";
+    ResultSet rs = statement.executeQuery(query);
+
+    while (rs.next()) {
+        String item_productname = rs.getString(2);
+        if (item_productname.equals(Product_name)) {
+            int item_productid = rs.getInt(1);
+            double item_price = rs.getDouble(3);
+            int item_stock = rs.getInt(4);
+            String item_deliveryDate = rs.getString(5);
+            return new Product(item_productid, item_productname, item_price, item_stock, item_deliveryDate);
+        }
+    }
+    return null;
+}
+
+public ArrayList<Product> showCollection() throws SQLException {
+    String query = "SELECT * FROM USERDB.PRODUCTS ORDER BY PRODUCT_ID";
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Product> inventory = new ArrayList();
+        System.out.println("s");
+
+    while (rs.next()) {
+        int item_productid = rs.getInt(1);
+        String item_productname = rs.getString(2);
+        double item_price = rs.getDouble(3);
+        int item_stock = rs.getInt(4);
+        String item_deliveryDate = rs.getString(5);
+        System.out.println(item_productname);
+
+        inventory.add(new Product(item_productid, item_productname, item_price, item_stock, item_deliveryDate));
+    }
+
+    return inventory;
+}
+
+public void decreaseStock(int productid, int quantity) throws SQLException {
+    String query = "UPDATE USERDB.PRODUCTS SET STOCK = (SELECT STOCK FROM ISDUSER.PRODUCT WHERE PRODUCT_ID = "+productid+") - "+quantity+" WHERE PRODUCT_ID = "+productid+"";
+    statement.executeUpdate(query);
+}
+        
+    
 
  
 

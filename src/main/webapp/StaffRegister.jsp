@@ -42,8 +42,8 @@
 
         %>
         <div class="Content" >
-        <h1 align="center">Become a member</h1>
-        <form action="RegisterServlet" method="post" id="registerForm">
+        <h1 align="center">Become a staff member</h1>
+        <form action="RegisterStaffServlet" method="post" id="registerForm">
             <table>
                 <tr><td><label class ="formText" for="fname">First Name</label><p><input type="text" placeholder="Enter first name" name="fname" required="true"></p></td></tr>
                 <tr><td><label class ="formText" for="lname">Last Name</label><p><input type="text" placeholder="Enter last name" name="lname" required="true"></p></td></tr>
@@ -56,7 +56,7 @@
             <div align="center" class="buttons">
                 <table>
                     <tr><td><input type="submit"  value ="Register"></td></tr>
-                    <tr><td id="btnRegister">Already have an account. Sign in <a href="Login.jsp">here</a></td></tr>
+                    <tr><td id="btnRegister">Already have an account as a staff. Sign in <a href="StaffLogin.jsp">here</a></td></tr>
                 </table>
               
             </div>

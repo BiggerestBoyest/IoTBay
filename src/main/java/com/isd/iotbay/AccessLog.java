@@ -1,10 +1,12 @@
 package com.isd.iotbay;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Owner
  */
-public class AccessLog 
+public class AccessLog  implements Serializable
 {
     private int _logID;
     private int _staffID;
@@ -34,6 +36,27 @@ public class AccessLog
     {
         _logID = logID;
         _customerID = customerID;
+        _loginDate = loginDate;
+        _loginTime = loginTime;
+        _logoutDate = logoutDate;
+        _logoutTime = logoutTime;
+    }
+       
+    public AccessLog(int logID, int customerID,int staffID ,String loginDate, String loginTime, String logoutDate, String logoutTime)
+    {
+        _logID = logID;
+        _customerID = customerID;
+        _staffID = staffID;
+        _loginDate = loginDate;
+        _loginTime = loginTime;
+        _logoutDate = logoutDate;
+        _logoutTime = logoutTime;
+    }
+       
+          public AccessLog(int logID, String loginDate, String loginTime, String logoutDate, String logoutTime, int staffID)
+    {
+        _logID = logID;
+        _staffID = staffID;
         _loginDate = loginDate;
         _loginTime = loginTime;
         _logoutDate = logoutDate;

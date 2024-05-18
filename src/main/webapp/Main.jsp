@@ -23,6 +23,10 @@
                 <div class="dropdown-content">
                     <a href ="#">Show Orders</a>
                     <a href ="AccessLogServlet">Edit Profile</a>
+                    <%if(staff != null){
+                       %>
+                       <a href ="AccessLogServlet">Edit Staff Profile</a>    
+                        <%}%>
                     <a href ="LogoutServlet">Logout</a>
                 </div>
              </div>

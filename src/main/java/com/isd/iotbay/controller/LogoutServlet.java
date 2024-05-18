@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.isd.iotbay.AccessLog;
+import com.isd.iotbay.Customer;
+import com.isd.iotbay.Staff;
 
 import com.isd.iotbay.dao.DBManager;
 import java.sql.SQLException;
@@ -22,9 +24,16 @@ public class LogoutServlet extends HttpServlet
         AccessLog log = (AccessLog)currentSession.getAttribute("currentLog");
         String currentDate = LocalDate.now().toString();
         String currentTime = LocalTime.now().toString();
+        
+        Customer customer = (Customer)currentSession.getAttribute("customer");
+        
         try
         {
-            manager.UpdateAccessLog(log.GetLogID(), log.GetCustomerID(), currentDate, currentTime);
+            if (customer != null)
+                manager.UpdateAccessLog(log.GetLogID(), log.GetCustomerID(), currentDate, currentTime);
+            else
+                manager.UpdateAccessLog(log.GetLogID(), currentDate, currentTime, log.GetStaffID());
+
         } catch (SQLException ex)
         {
             System.out.println(ex + " error on update log");

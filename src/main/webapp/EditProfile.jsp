@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="css/edit_profile.css">
 <%@page import="com.isd.iotbay.Customer" %>
+<%@page import="com.isd.iotbay.Staff" %>
 <%@page import="com.isd.iotbay.dao.DBManager" %>
 <%@page import="com.isd.iotbay.AccessLog" %>
 <%@page import="java.util.ArrayList"%>
@@ -12,6 +13,7 @@
         <link rel="stylesheet" href="css/edit_profile.css?version=1">
            <%
                 Customer customer = (Customer)session.getAttribute("customer");
+                Staff staff = (Staff)session.getAttribute("staff");
                 AccessLog currentLog = (AccessLog)session.getAttribute("currentLog");
                 String emailError = (String)session.getAttribute("emailError") ;
                 String passwordError = (String)session.getAttribute("passwordError");
@@ -38,33 +40,33 @@
             
             <table class="customerForm" style="margin-right:auto;margin-left:0px;">
                 <tr>
-                    <td><label class ="formText" for="fname">First Name</label><p><input type="text" value="<%=customer.GetFirstName()%>" name="fname" required="false"></p></td>
-                    <td><label class ="formText" for="lname">Last Name</label><p><input type="text" value="<%=customer.GetLastName()%>" name="lname" required="false"></p></td>
+                    <td><label class ="formText" for="fname">First Name</label><p><input type="text" value="<%=customer != null ? customer.GetFirstName() : staff.GetFirstName()%>" name="fname" required="false"></p></td>
+                    <td><label class ="formText" for="lname">Last Name</label><p><input type="text" value="<%=customer != null ? customer.GetLastName() : staff.GetLastName()%>" name="lname" required="false"></p></td>
                 </tr>
                 <tr>
-                    <td><label class ="formText" for="dob">Date of Birth</label><p><input type="date" value="<%=customer.GetDOB()%>" name="dob" required="false"></p></td>
-                    <td><label class ="formText" for="email">Email</label><p><input style="<%=emailError != null ? "border:3.5px solid #FF0000" : "border:3px solid #cccccc"%>" type="email" value="<%=customer.GetEmail()%>" name="email" required="false"></p></td>
+                    <td><label class ="formText" for="dob">Date of Birth</label><p><input type="date" value="<%= customer != null ? customer.GetDOB() : staff.GetDOB()%>" name="dob" required="false"></p></td>
+                    <td><label class ="formText" for="email">Email</label><p><input style="<%=emailError != null ? "border:3.5px solid #FF0000" : "border:3px solid #cccccc"%>" type="email" value="<%=customer != null ? customer.GetEmail() : staff.GetEmail()%>" name="email" required="false"></p></td>
                 </tr>
                 <tr>
-                    <td><label class ="formText" for="phone">Phone</label><p><input type="number" value="<%=customer.GetPhone()%>" name="phone" required="false"></p></td>
-                    <td><label class ="formText" for="password">Password</label><p><input type="password" style="<%=passwordError != null ? "border:3.5px solid #FF0000" : "border:3px solid #cccccc"%>" value="<%= customer.GetPassword()%>" name="password" required="false" id="pass"></p></td>
+                    <td><label class ="formText" for="phone">Phone</label><p><input type="number" value="<%=customer != null ? customer.GetPhone() : staff.GetPhone()%>" name="phone" required="false"></p></td>
+                    <td><label class ="formText" for="password">Password</label><p><input type="password" style="<%=passwordError != null ? "border:3.5px solid #FF0000" : "border:3px solid #cccccc"%>" value="<%= customer != null ? customer.GetPassword() : staff.GetPassword()%>" name="password" required="false" id="pass"></p></td>
                 </tr>
                 <tr>
-                        <td><label class ="formText" for="streetNumber">Street Number</label><p><input type="number" value="<%=customer.GetStreetNumber() %>" name="streetNumber" required="false"></p></td>    
-                        <td><label class ="formText" for="streetAddress">Street Address)</label><p><input type="text" value="<%=customer.GetStreet() %>" name="streetAddress" required="false"></p></td>
-                        <td><label class ="formText" for="streetType">Street Type</label><p><input type="text" value="<%=customer.GetStreetType() %>" name="streetType" required="false"></p></td>
-                        <td><label class ="formText" for="state">State</label><p><input type="text" value="<%=customer.GetState() %>" name="state" required="false"></p></td>
-                        <td><label class ="formText" for="postcode">Postcode</label><p><input type="number" value="<%=customer.GetPostcode() %>" name="postcode" required="false"></p></td>
+                        <td><label class ="formText" for="streetNumber">Street Number</label><p><input type="number" value="<%=customer != null ? customer.GetStreetNumber() : staff.GetStreetNumber()%>" name="streetNumber" required="false"></p></td>    
+                        <td><label class ="formText" for="streetAddress">Street Address)</label><p><input type="text" value="<%= customer != null ? customer.GetStreet() : staff.GetStreet() %>" name="streetAddress" required="false"></p></td>
+                        <td><label class ="formText" for="streetType">Street Type</label><p><input type="text" value="<%=customer != null ? customer.GetStreetType() : staff.GetStreetType() %>" name="streetType" required="false"></p></td>
+                        <td><label class ="formText" for="state">State</label><p><input type="text" value="<%=customer != null ? customer.GetState() : staff.GetState() %>" name="state" required="false"></p></td>
+                        <td><label class ="formText" for="postcode">Postcode</label><p><input type="number" value="<%=customer != null ? customer.GetPostcode() : staff.GetPostcode() %>" name="postcode" required="false"></p></td>
                 </tr>
                 <tr>
-                    <td><label class ="formText" for="CardNumber">Card Number</label><p><input type="text" value="<%=customer.GetCardNumber()%>" name="cardNumber" required="false"></p></td>
-                    <td><label class ="formText" for="ExpiryDate">Expiry Date</label><p><input type="text" value="<%=customer.GetExpiryDate()%>" name="expiryDate" required="false"></p></td>
-                    <td><label class ="formText" for="CVV">CVV</label><p><input type="text" value="<%=customer.GetCVV()%>" name="cvv" required="false"></p></td>
+                    <td><label class ="formText" for="CardNumber">Card Number</label><p><input type="text" value="<%= customer != null ? customer.GetCardNumber() : staff.GetCardNumber()%>" name="cardNumber" required="false"></p></td>
+                    <td><label class ="formText" for="ExpiryDate">Expiry Date</label><p><input type="text" value="<%=customer != null ? customer.GetExpiryDate() : staff.GetExpiryDate()%>" name="expiryDate" required="false"></p></td>
+                    <td><label class ="formText" for="CVV">CVV</label><p><input type="text" value="<%=customer != null ? customer.GetCVV() : staff.GetCVV()%>" name="cvv" required="false"></p></td>
                 </tr>
             </table>
                  <div align="center" class="buttons">
                 <table>
-                    <tr><td><input type="submit" form novalidate  value ="Update Details"></td></tr>
+                    <tr><td><input type="submit" formnovalidate  value ="Update Details"></td></tr>
                 </table>
                 <h1><span class = "message"><%=(emailError != null ? emailError : "")%></span></h1>
                 <h1><span class = "message"><%=(passwordError!= null ? passwordError : "")%></span></h1>
