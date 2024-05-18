@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet
             }
             currentSession.setAttribute("currentLog", currentLog);
             currentSession.setAttribute("customer",customer);
-            request.getRequestDispatcher("Main.jsp").forward(request,response);
+            request.getRequestDispatcher("Index.jsp").forward(request,response);
         } else
         {
             currentSession.setAttribute("loginError", "User was not found");

@@ -1,5 +1,6 @@
 package com.isd.iotbay.controller;
 
+import com.isd.iotbay.Product;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.isd.iotbay.dao.*;
+import java.util.ArrayList;
 
 public class ConnServlet extends HttpServlet 
 {
@@ -40,17 +42,20 @@ public class ConnServlet extends HttpServlet
        {
             response.setContentType("text/html;charset=UTF-8");       
             HttpSession session = request.getSession();
-            con = dbConnector.OpenConnection();       
+            con = dbConnector.OpenConnection();    
+            ArrayList<Product> products = new ArrayList();
            try {
 
                dbManager = new DBManager(con);
+               products = dbManager.showCollection();
 
            } catch (SQLException ex) {
 
                Logger.getLogger(ConnServlet.class.getName()).log(Level.SEVERE, null, ex);
 
            }
-           session.setAttribute("manager", dbManager);           
+           session.setAttribute("manager", dbManager);  
+           session.setAttribute("allProducts",products);
        }   
 
         public void Destroy() 

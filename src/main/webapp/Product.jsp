@@ -37,7 +37,7 @@
                 <%
                     if (inventory != null) {
                     for (Product product : inventory){
-                    }
+                    
                 %>    
                 <tr>
                     <td><p><%=product.getProduct_ID()%></p></td>

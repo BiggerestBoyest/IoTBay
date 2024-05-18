@@ -4,6 +4,7 @@
     Author     : jogun
 --%>
 
+<%@page import="com.isd.iotbay.Staff"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import='com.isd.iotbay.Product' %>
 <!DOCTYPE html>
@@ -16,6 +17,7 @@
         <% 
             Product product = (Product) session.getAttribute("product");
             String found = (String) session.getAttribute("found"); 
+            Staff staff = (Staff)session.getAttribute("staff");
         %>
         
         <h1>Search Results</h1>
@@ -44,12 +46,13 @@
                 <td><p><%=product.getProduct_deliveryDate()%></p></td>                    
             </tr>
         </table>
-        
+        <% if(staff != null) { %>
             <a href='Collection_update.jsp'>Update Product</a>
             <a href="Collection_delete.jsp">Delete Product</a>
             <br>
-            <a href="Collection_search.jsp">Return to Search</a>
-            
+            <%}%>
+                        <a href="Collection_search.jsp">Return to Search</a>
+
         <%} else {%>
         <span><%=(found != null ? found: "")%></span>
         <% } %>    

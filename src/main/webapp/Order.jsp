@@ -74,15 +74,13 @@
             <div id="buttonContainer">
                 <table>
                     <a href="Collection_search.jsp">Search product</a>
-                    <a href="Order.jsp">Start Order</a>
-
             <%
                 if (products != null){
                     for (Product pro : products){
             %>
             
             <tr>
-                <td><p><%=pro.getProduct_ID()%></p></td>
+                <td><a hre<p><%=pro.getProduct_ID()%></p></td>
                 <td><p><%=pro.getProduct_name()%></p></td>
                 <td><p><%=pro.getCost()%></p></td>
                 <td><p><%=Integer.toString(pro.getProduct_stock())%></p></td>

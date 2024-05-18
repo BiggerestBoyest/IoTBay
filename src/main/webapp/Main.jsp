@@ -8,8 +8,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="css/register.css">
-           <%
+FF           <%
                 Customer customer = (Customer)session.getAttribute("customer");
                 AccessLog currentLog = (AccessLog)session.getAttribute("currentLog");
                 Staff staff = (Staff)session.getAttribute("staff");

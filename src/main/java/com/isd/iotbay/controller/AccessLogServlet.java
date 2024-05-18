@@ -24,7 +24,6 @@ public class AccessLogServlet extends HttpServlet
         Customer customer = (Customer)currentSession.getAttribute("customer");
         Staff staff = (Staff)currentSession.getAttribute("staff");
         ArrayList<AccessLog> logs = new ArrayList();
-        System.out.println("ID++++ " + staff.GetID());
         try
         {   
             if (customer != null)

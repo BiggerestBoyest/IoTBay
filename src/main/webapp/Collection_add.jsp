@@ -58,7 +58,7 @@
             <input type='submit' value='Add Product'>
         </form>
         
-        <a href='Collection_manage.jsp'>Back to Collection Management</a><br>
+        <a href='Index.jsp'>Back to Main Page</a><br>
         <span><%= (added!= null ? added : "")%></span>
     </body>
 </html>

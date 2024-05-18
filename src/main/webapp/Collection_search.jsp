@@ -27,7 +27,7 @@
         </form><!-- comment -->
             
         <br>    
-        <a href='Collection_manage.jsp'>Back to Collection Management</a><!-- comment -->
+        <a href='Index.jsp'>Back to Main Page</a><!-- comment -->
         <br>
         
        

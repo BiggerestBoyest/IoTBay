@@ -493,6 +493,48 @@ public ArrayList<Product> showCollection() throws SQLException {
     return inventory;
 }
 
+
+public ArrayList<Product> ShowAllCustomerOrders(int customerID) throws SQLException 
+{
+        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_ID WHERE CUSTOMER_ID=" + customerID;
+        return ShowAllOrders(query);
+}
+
+public ArrayList<Product> ShowAllStaffOrders(int staffID) throws SQLException 
+{
+        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_ID WHERE STAFF_ID=" + staffID;
+        return ShowAllOrders(query);
+}
+
+public ArrayList<Product> ShowAllGuestOrders(int guestID) throws SQLException 
+{
+        String query = "SELECT * FROM USERDB.ORDERS ORDER BY PRODUCT_ID WHERE GUEST_ID=" + guestID;
+        return ShowAllOrders(query);
+}
+
+
+
+
+private ArrayList<Product> ShowAllOrders(String query) throws SQLException {
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Product> inventory = new ArrayList();
+        System.out.println("s");
+
+    while (rs.next()) {
+        int item_productid = rs.getInt(1);
+        String item_productname = rs.getString(2);
+        double item_price = rs.getDouble(3);
+        int item_stock = rs.getInt(4);
+        String item_deliveryDate = rs.getString(5);
+        System.out.println(item_productname);
+
+        inventory.add(new Product(item_productid, item_productname, item_price, item_stock, item_deliveryDate));
+    }
+
+    return inventory;
+}
+
+
 public void decreaseStock(int productid, int quantity) throws SQLException {
     String query = "UPDATE USERDB.PRODUCTS SET STOCK = (SELECT STOCK FROM ISDUSER.PRODUCT WHERE PRODUCT_ID = "+productid+") - "+quantity+" WHERE PRODUCT_ID = "+productid+"";
     statement.executeUpdate(query);
