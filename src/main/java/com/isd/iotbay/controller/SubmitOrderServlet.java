@@ -50,7 +50,7 @@ public class SubmitOrderServlet  extends HttpServlet{
         }
         
         session.setAttribute("currentOrder", order);
-        request.getRequestDispatcher("Order.jsp").forward(request,response);
+        request.getRequestDispatcher("EditOrder.jsp").forward(request,response);
         
     }
     

@@ -571,7 +571,8 @@ public ArrayList<Order> GetCustomerOrdersByDate(int customerID, String date) thr
         int queriedCustomerID = rs.getInt(2);
         String time = rs.getString(6);
         String delivery = rs.getString(7);
-        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+        boolean isSubmitted = rs.getInt(8) != 0;
+        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery,isSubmitted));
     }
 
     return orders;
@@ -588,12 +589,16 @@ public ArrayList<Order> GetStaffOrdersByDate(int staffID, String date) throws SQ
         int orderID = rs.getInt(1);
         String time = rs.getString(6);
         String delivery = rs.getString(7);
+                boolean isSubmitted = rs.getInt(8) != 0;
         Order order = new Order(orderID);
         order.SetStaffID(staffID);
         order.SetDate(date);
         order.SetTime(time);
         order.SetAddress(delivery);
+        if(isSubmitted)
+            order.SetAsSubmitted();
         orders.add(order);
+        
     }
 
     return orders;
@@ -610,11 +615,14 @@ public ArrayList<Order> GetGuestOrdersByDate(int guestID, String date) throws SQ
         int orderID = rs.getInt(1);
         String time = rs.getString(6);
         String delivery = rs.getString(7);
+        boolean isSubmitted = rs.getInt(8) != 0;
         Order order = new Order(orderID);
         order.SetGuestID(guestID);
         order.SetDate(date);
         order.SetTime(time);
         order.SetAddress(delivery);
+            if(isSubmitted)
+            order.SetAsSubmitted();
         orders.add(order);
     }
 
@@ -633,8 +641,8 @@ public ArrayList<Order> GetAllCustomerOrders(int customerID) throws SQLException
         String date = rs.getString(5);
         String time = rs.getString(6);
         String delivery = rs.getString(7);
-
-        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+        boolean isSubmitted = rs.getInt(8) != 0;
+        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery,isSubmitted));
     }
 
     return orders;
@@ -650,12 +658,17 @@ public ArrayList<Order> GetAllStaffOrders(int staffID) throws SQLException
 
     while (rs.next()) {
         int orderID = rs.getInt(1);
-        int queriedCustomerID = rs.getInt(2);
         String date = rs.getString(5);
         String time = rs.getString(6);
         String delivery = rs.getString(7);
-
-        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+        boolean isSubmitted = rs.getInt(8) != 0;
+        Order order = new Order(orderID);
+        order.SetDate(date);
+        order.SetTime(time);
+        order.SetStaffID(staffID);
+        if(isSubmitted)
+            order.SetAsSubmitted();
+        orders.add(order);
     }
 
     return orders;
@@ -669,13 +682,18 @@ public ArrayList<Order> GetAllGuestOrders(int guestID) throws SQLException
     ArrayList<Order> orders = new ArrayList();
 
     while (rs.next()) {
-        int orderID = rs.getInt(1);
-        int queriedCustomerID = rs.getInt(2);
+       int orderID = rs.getInt(1);
         String date = rs.getString(5);
         String time = rs.getString(6);
         String delivery = rs.getString(7);
-
-        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+        boolean isSubmitted = rs.getInt(8) != 0;
+        Order order = new Order(orderID);
+        order.SetDate(date);
+        order.SetTime(time);
+        order.SetGuestID(guestID);
+        if(isSubmitted)
+            order.SetAsSubmitted();
+        orders.add(order);
     }
 
     return orders;
@@ -691,7 +709,7 @@ public void UpdateOrder(int orderID, String orderDate, String orderTime, String 
 
 public void SubmitOrder(int orderID) throws SQLException
 {
-    String update = "UPDATE USERDB.ORDERS SET SUBMITTEDSTATUS= " + 1  + " WHERE ORDER_ID=" + orderID;
+    String update = "UPDATE USERDB.ORDERS SET SUBMITTEDSTATUS="  + 1 + " WHERE ORDER_ID=" + orderID;
     statement.executeUpdate(update);
 }
 
@@ -827,6 +845,9 @@ public Order GetOrderFromCustomer(int orderID, int customerID ) throws SQLExcept
         Order order =  new Order(orderID);
         order.SetCustomerID(customerID);
         order.SetTime(time);
+          boolean isSubmitted = rs.getInt(8) != 0;
+        if(isSubmitted)
+            order.SetAsSubmitted();
         order.SetDate(date);
         order.SetAddress(deliveryAddress);
         return order;
@@ -847,6 +868,9 @@ public Order GetOrderStaff(int orderID, int staffID ) throws SQLException
         Order order =  new Order(orderID);
         order.SetCustomerID(staffID);
         order.SetTime(time);
+        boolean isSubmitted = rs.getInt(8) != 0;
+        if(isSubmitted)
+            order.SetAsSubmitted();
         order.SetDate(date);
         order.SetAddress(deliveryAddress);
         return order;
@@ -867,6 +891,9 @@ public Order GetOrderFromGuest(int orderID, int guestID ) throws SQLException
         Order order =  new Order(orderID);
         order.SetCustomerID(guestID);
         order.SetTime(time);
+          boolean isSubmitted = rs.getInt(8) != 0;
+        if(isSubmitted)
+            order.SetAsSubmitted();
         order.SetDate(date);
         order.SetAddress(deliveryAddress);
         return order;

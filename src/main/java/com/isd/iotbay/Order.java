@@ -25,13 +25,14 @@ public class Order
     private String _invoice;
     private boolean _isSubmitted = false;
 
-    public Order(int orderID, int customerID,String dateOfOrder,String timeOfOrder, String deliveryAddress)
+    public Order(int orderID, int customerID,String dateOfOrder,String timeOfOrder, String deliveryAddress, boolean isSubmitted)
     {
         _orderID = orderID;
         _customerID = customerID;
         _timeOfOrder = timeOfOrder;
         _address = deliveryAddress;
         _dateOfOrder = dateOfOrder;
+        _isSubmitted = isSubmitted;
     }
     
     public Order(int orderID)
