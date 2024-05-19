@@ -42,7 +42,11 @@
                 AccessLog currentLog = (AccessLog)session.getAttribute("currentLog");
                 Staff staff = (Staff)session.getAttribute("staff");
                 ArrayList<Product> products = (ArrayList<Product>)session.getAttribute("allProducts");
-                ArrayList<Order> orders = (ArrayList<Order>) session.getAttribute("allUserOrders");
+                Order order = (Order) session.getAttribute("currentOrder");
+                String addedProduct = (String)session.getAttribute("addedProduct");
+                String saveSubmitOrder = (String)session.getAttribute("saveSubmitOrder");
+                ArrayList<Order> orders = (ArrayList<Order>)session.getAttribute("allOrders");
+                
     %>
     <div class="header">
         <a href="Index.jsp" style="background-color: transparent;"><img src="css/IOTBAY Logo.png"></a>
@@ -52,7 +56,6 @@
                     <a href ="ShowOrderServlet">Show Orders</a>
                     <a href ="AccessLogServlet">Edit Profile</a>
                     <a href ="LogoutServlet">Logout</a>
-                    <a href ="Order.jsp">Cart (<%=orders == null ? 0 : orders.size()%>)</a>
                     <% if (staff != null){ %>
                     <a href ="Collection_add.jsp">Add Product</a>
                     <%}%>
@@ -74,25 +77,20 @@
             <div id="buttonContainer">
                 <table>
                     <a href="Collection_search.jsp">Search product</a>
-                    <a href="OrderServlet">Start Order</a>
-
+                    
+                    <form action="EditOrderServlet" method="get">
             <%
-                if (products != null){
-                    for (Product pro : products){
+                if (orders != null){
+                    for (Order ord : orders){
             %>
             
             <tr>
-                <td><p><%=pro.getProduct_ID()%></p></td>
-                <td><p><%=pro.getProduct_name()%></p></td>
-                <td><p><%=pro.getCost()%></p></td>
-                <td><p><%=Integer.toString(pro.getProduct_stock())%></p></td>
-                <td><p><%=pro.getProduct_deliveryDate()%></p></td>
-                        
+                <td><h4>Order #: <%=ord.GetID() %></h4></td>
+                <td><input type="submit" name="<%=ord.GetID()%>" value="Edit Order"></td>
             </tr>
                 <%}}%>
-                            
-                </table>
-            </div>
+                         </form>   
+         
         </div>
    </body>
 </html>

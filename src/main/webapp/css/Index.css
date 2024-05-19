@@ -59,6 +59,11 @@ tr,td{
     padding-top:30px;
 }
 
+a .imgLink
+{
+    background-color: rgba(0,0,0,0);
+    position:relative;
+}
 
 .header{
     display: block;

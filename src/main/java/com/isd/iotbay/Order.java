@@ -19,19 +19,19 @@ public class Order
     private int _staffID;
     private int _guestID;
     private ArrayList<Product> _products;
+        private String _dateOfOrder;
     private String _timeOfOrder;
-    private String _deliveryAddress;
+    private String _address;
     private String _invoice;
     public boolean _isSubmitted = false;
 
-    public Order(int orderID, int customerID, ArrayList<Product> products,String timeOfOrder, String deliveryAddress, String invoice)
+    public Order(int orderID, int customerID,String dateOfOrder,String timeOfOrder, String deliveryAddress)
     {
         _orderID = orderID;
         _customerID = customerID;
-        _products = products;
         _timeOfOrder = timeOfOrder;
-        _deliveryAddress = deliveryAddress;
-        _invoice = invoice;
+        _address = deliveryAddress;
+        _dateOfOrder = dateOfOrder;
     }
     
     public Order(int orderID)
@@ -45,8 +45,89 @@ public class Order
     public void SetCustomerID(int newID) {_customerID = newID;}
     public void SetStaffID(int newID) {_staffID = newID;}
     public void SetGuestID(int newID) {_guestID = newID;}
+    public void SetTime(String time) {_timeOfOrder = time;}
+    public void SetDate(String date) {_dateOfOrder = date;}
     public void AddProduct(Product product) {_products.add(product);}
     public void RemoveProduct(Product product) {_products.remove(product);}
-    public void UpdateOrder(String timeOfOrder, String deliveryAddress, boolean isSubmitted){_timeOfOrder = timeOfOrder; _deliveryAddress = deliveryAddress; _isSubmitted = isSubmitted;}
+    public void UpdateOrder( String deliveryAddress, boolean isSubmitted){_address = deliveryAddress; _isSubmitted = isSubmitted;}
+    public String GetAddress(){return _address;}
+    public String GetDate(){return _timeOfOrder;}
+    public String GetTime(){return _dateOfOrder;}
 
+    
+     public String GetStreetNumber()
+    {
+        if(_address == null)
+            return "";
+        
+        if(_address.isEmpty() || _address.equals("null"))
+            return "";
+        
+        String[] split = _address.trim().split("\\s");
+        System.out.println(split[0] + " street num");
+        return split[0];
+    }
+    
+        
+    public String GetStreet()
+    {
+             if(_address == null)
+            return "";
+        
+        if(_address.isEmpty() || _address.equals("null"))
+            return "";
+        
+        String[] split = _address.trim().split("\\s");
+        return split[1];
+    }
+    
+    
+        
+    public String GetStreetType()
+    {
+              if(_address == null)
+            return "";
+        
+        if(_address.isEmpty() || _address.equals("null"))
+            return "";
+        
+        String[] split = _address.trim().split("\\s");
+        return split[2];
+    }
+    
+        public String GetSuburb()
+    {
+              if(_address == null)
+            return "";
+        
+        if(_address.isEmpty() || _address.equals("null"))
+            return "";
+        
+        String[] split = _address.trim().split("\\s");
+        return split[3];
+    }
+    
+    public String GetState()
+    {
+               if(_address == null)
+            return "";
+        
+        if(_address.isEmpty() || _address.equals("null"))
+            return "";
+        
+        String[] split = _address.trim().split("\\s");
+        return split[4];
+    }
+    
+      public String GetPostcode()
+    {
+              if(_address == null)
+            return "";
+        
+        if(_address.isEmpty() || _address.equals("null"))
+            return "";
+        
+        String[] split = _address.trim().split("\\s");
+        return split[5];
+    }
 }

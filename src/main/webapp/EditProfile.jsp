@@ -23,18 +23,18 @@
                 String logError = (String) session.getAttribute("logError");
             %>
         <div class="header">
-             <img src="css/IOTBAY Logo.png">
+        <a href="Index.jsp" style="background-color: transparent;"><img src="css/IOTBAY Logo.png"></a>
              <div class="dropdown" style="float:right" >
                 <button class="dropbtn"></button> 
                 <div class="dropdown-content">
-                    <a href ="#">Show Orders</a>
-                    <a href ="#">Edit Profile</a>
+                    <a href ="ShowOrderServlet">Show Orders</a>
+                    <a href ="AccessLogServlet">Edit Profile</a>
                     <a href ="LogoutServlet">Logout</a>
                 </div>
              </div>
         </div>
     </head>
-    <body action="AccessLogServlet">
+    <body>
         <h1>Current Details</h1>
         <form action="EditServlet" method="post" id="updateForm">
             

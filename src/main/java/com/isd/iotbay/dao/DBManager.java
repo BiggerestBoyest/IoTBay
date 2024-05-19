@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 import com.isd.iotbay.AccessLog;
+import com.isd.iotbay.Order;
 import com.isd.iotbay.Product;
 
 public class DBManager 
@@ -515,41 +516,39 @@ public ArrayList<Product> ShowAllGuestOrders(int guestID) throws SQLException
 
 
 
-public void CreateCustomerOrder(int orderID, int customerID) throws SQLException 
+public void CreateCustomerOrder(int orderID, int customerID, String orderDate, String orderTime) throws SQLException 
 {
-    String query = "INSERT INTO USERDB.Orders (ORDER_ID,FK_CUSTOMER_ID)" + " VALUES (" + orderID + ", " + customerID +  ")";
+    String query = "INSERT INTO USERDB.Orders (ORDER_ID,FK_CUSTOMER_ID, DATE_OF_ORDER, TIME_OF_ORDER)" + " VALUES (" + orderID + ", " + customerID + ", '" + orderDate + "', '" + orderTime + "')";
     statement.executeUpdate(query);
 }
 
-public void CreateStaffOrder(int orderID,int staffID) throws SQLException 
+public void CreateStaffOrder(int orderID,int staffID, String orderDate, String orderTime) throws SQLException 
 {
-     String query = "INSERT INTO USERDB.Orders (ORDER_ID,FK_STAFF_ID)" + " VALUES (" + orderID + ", " + staffID +  ")";
+    String query = "INSERT INTO USERDB.Orders (ORDER_ID,FK_STAFF_ID, DATE_OF_ORDER, TIME_OF_ORDER)" + " VALUES (" + orderID + ", " + staffID + ", '" + orderDate + "', '" + orderTime + "')";
     statement.executeUpdate(query);
 }
 
-public void CreateGuestOrder(int orderID, int guestID) throws SQLException 
+public void CreateGuestOrder(int orderID, int guestID, String orderDate, String orderTime) throws SQLException 
 {
-     String query = "INSERT INTO USERDB.ORDERS (ORDER_ID, GUEST_ID)" + " VALUES (" + orderID + ", " + guestID +  ")";
+    String query = "INSERT INTO USERDB.Orders (ORDER_ID,GUEST_ID, DATE_OF_ORDER, TIME_OF_ORDER)" + " VALUES (" + orderID + ", " + guestID + ", '" + orderDate + "', '" + orderTime + "')";
      System.out.println("creating guest");
     statement.executeUpdate(query);
 }
 
 public int GenerateNewGuestID() throws SQLException 
 {
-    String query = "SELECT * FROM USERDB.ORDER_PRODUCT";
-    ResultSet rs = statement.executeQuery(query);
-    int count = 0;
-    
-    while(rs.next())
-        count++;
-    
-    return count + 1; 
+    //String query = "SELECT ORDER_ID FROM USERDB.ORDER_PRODUCT";
+   // ResultSet rs = statement.executeQuery(query);
+    int value = 0;
+    Random random = new Random();
+    value = random.nextInt(9999);
+    return value;
 }
 
 
 public int GenerateNewOrderID() throws SQLException 
 {
-    String query = "SELECT * FROM USERDB.ORDERS";
+    String query = "SELECT ORDER_ID FROM USERDB.ORDERS";
     ResultSet rs = statement.executeQuery(query);
     int count = 0;
     
@@ -559,32 +558,171 @@ public int GenerateNewOrderID() throws SQLException
     return count + 1; 
 }
 
+public ArrayList<Order> GetAllCustomerOrders(int customerID) throws SQLException
+{
+      String query = "SELECT * FROM USERDB.ORDERS WHERE FK_CUSTOMER_ID= " + customerID;
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Order> orders = new ArrayList();
+
+    while (rs.next()) {
+        int orderID = rs.getInt(1);
+        int queriedCustomerID = rs.getInt(2);
+        String date = rs.getString(5);
+        String time = rs.getString(6);
+        String delivery = rs.getString(7);
+
+        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+    }
+
+    return orders;
+}
+
+public ArrayList<Order> GetAllStaffOrders(int staffID) throws SQLException
+{
+      String query = "SELECT * FROM USERDB.ORDERS WHERE FK_STAFF_ID= " + staffID;
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Order> orders = new ArrayList();
+
+    while (rs.next()) {
+        int orderID = rs.getInt(1);
+        int queriedCustomerID = rs.getInt(2);
+        String date = rs.getString(5);
+        String time = rs.getString(6);
+        String delivery = rs.getString(7);
+
+        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+    }
+
+    return orders;
+}
+
+
+public ArrayList<Order> GetAllGuestOrders(int guestID) throws SQLException
+{
+      String query = "SELECT * FROM USERDB.ORDERS WHERE GUEST_ID= " + guestID;
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Order> orders = new ArrayList();
+
+    while (rs.next()) {
+        int orderID = rs.getInt(1);
+        int queriedCustomerID = rs.getInt(2);
+        String date = rs.getString(5);
+        String time = rs.getString(6);
+        String delivery = rs.getString(7);
+
+        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+    }
+
+    return orders;
+}
+
+public void UpdateOrder(int orderID, String orderDate, String orderTime, String deliveryAddress) throws SQLException {        
+    String query = "UPDATE USERDB.ORDERS SET DATE_OF_ORDER = '" + orderDate + "', TIME_OF_ORDER='" + orderTime +"', DELIVERY_ADDRESS='" +deliveryAddress + "' WHERE ORDER_ID=" + orderID;
+    statement.executeUpdate(query);
+
+}
+
+private ArrayList<Integer> GetAllProductsIDsFromOrder(int orderID) throws SQLException
+{
+      String query = "SELECT * FROM USERDB.ORDER_PRODUCT WHERE ORDER_ID= " + orderID;
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Integer> ids = new ArrayList();
+
+        while (rs.next()) {
+        int productID = rs.getInt(2);
+        ids.add(productID);
+     
+}
+        
+        return ids;
+}
+
+public void RemoveProductFromOrder(int orderID, int productID) throws SQLException
+{
+      String query = "SELECT * FROM USERDB.ORDER_PRODUCT WHERE PRODUCT_ID=" + productID + " AND ORDER_ID=" + orderID;
+        ResultSet rs = statement.executeQuery(query);
+           int oID ;
+            int pID;
+            int quantity = -1;
+            
+        while(rs.next())
+        {
+         oID = rs.getInt(1);
+         pID = rs.getInt(2);
+         quantity = rs.getInt(3);
+        }
+        
+        System.out.println("new quantity " + (quantity - 1) );
+        
+        if ((quantity - 1) <= 0)
+        {
+            String query2 = "DELETE FROM USERDB.ORDER_PRODUCT WHERE PRODUCT_ID=" + productID + " AND ORDER_ID=" + orderID;
+           statement.executeUpdate(query2);
+        //String query = "DELETE FROM USERDB.Customers WHERE ID= " + customerID ;
+        }  else 
+        {
+        String query2 = "UPDATE USERDB.ORDER_PRODUCT SET QUANTITY = " + (quantity - 1) + " WHERE ORDER_ID=" + orderID + " AND PRODUCT_ID=" + productID;
+           statement.executeUpdate(query2);
+        }
+            
+        
+    }
+
+
+public ArrayList<Product> GetAllProductsFromOrder(int orderID) throws SQLException {        
+    ArrayList<Integer> productIDs = GetAllProductsIDsFromOrder(orderID);
+    ArrayList<Product> products = new ArrayList();
+    
+    for(int i = 0; i < productIDs.size(); i++)
+    {
+        String query = "SELECT * FROM USERDB.PRODUCTS WHERE PRODUCT_ID= " + productIDs.get(i);
+        ResultSet rs = statement.executeQuery(query);
+
+        int productID;
+        String productName;
+        double productCost;
+        int productStock;
+        String productDeliveryDate;
+        while(rs.next())
+        {
+            productID = rs.getInt(1);
+            productName=  rs.getString(2);
+            productCost = rs.getDouble(3);
+            productStock = rs.getInt(4);
+            productDeliveryDate = rs.getString(5);
+            products.add(new Product(productID,productName,productCost,productStock,productDeliveryDate));
+        }
+    }
+
+    return products;
+
+}
+
+
+
 public void AddProductToOrder(int orderID, int productID) throws SQLException
 {
-     String query = "SELECT * USERDB.ORDER_PRODUCT WHERE ORDER_ID=" + orderID + " AND PRODUCT_ID=" + productID;
-     ResultSet set = statement.executeQuery(query);
-     boolean foundProductInOrder = false;
-     int quantity = 0;
-     while(set.next())
-     {
-         int queriedID = set.getInt(1);
-         int queriedProductID = set.getInt(2);
-         quantity = set.getInt(3);
-         
-         if(queriedID == orderID && productID == queriedProductID)
-         {
-            quantity++;
-            foundProductInOrder = true;
-            break;
-         }
-     }
-     
-     if(!foundProductInOrder)
-     {
-             String updateQuery = "INSERT INTO USERDB.ORDER_PRODUCT (ORDER_ID, PRODUCT_ID, QUANTITY)" + " VALUES (" + orderID + ", " + productID +  ", " + 1 +  ")";
-            statement.executeUpdate(query);
-     }
- 
+    String query = "SELECT QUANTITY FROM USERDB.ORDER_PRODUCT WHERE ORDER_ID=" + orderID + " AND PRODUCT_ID=" + productID;
+    ResultSet set = statement.executeQuery(query);
+    boolean foundSet = false;
+    int quantity = 1;
+    if(set.next())
+    {
+        System.out.println("next" + set.getInt(1));
+        quantity = set.getInt(1);
+        foundSet = true;
+    }
+
+                String updatedQuery = "";
+                if(!foundSet)
+                {
+                    updatedQuery = "INSERT INTO USERDB.ORDER_PRODUCT (ORDER_ID, PRODUCT_ID, QUANTITY)" + " VALUES (" + orderID + ", " + productID +  ", " + quantity +  ")";
+                } else 
+                {
+                    updatedQuery = "UPDATE USERDB.ORDER_PRODUCT SET QUANTITY= " + (quantity + 1) + " WHERE ORDER_ID= " + orderID + " AND PRODUCT_ID= " + productID;
+                }
+                
+            statement.executeUpdate(updatedQuery);
 }
 
 public void UpdateCustomerOrder(int order, int customerID, String timeOfOrder, String deliveryAddress, String dateOfOrder) throws SQLException

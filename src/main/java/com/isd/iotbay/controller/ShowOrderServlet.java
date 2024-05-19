@@ -12,8 +12,6 @@ import com.isd.iotbay.Order;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +25,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author jogun
  */
-public class SaveOrderServlet  extends HttpServlet{
+public class ShowOrderServlet  extends HttpServlet{
 //     private DBManager manager;
 //    private DBConnector Connector;
     
@@ -42,49 +40,30 @@ public class SaveOrderServlet  extends HttpServlet{
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
-        String saveOrder = request.getParameter("saveOrder");
-        request.setAttribute("saveSubmitOrder", null);
-        String currentDate = LocalDate.now().toString();
-        String currentTime = LocalTime.now().toString();
         
-        order.SetDate(currentDate);
-        order.SetTime(currentTime);
+        String saveOrder = request.getParameter("saveOrder");
+        ArrayList<Order> orders = new ArrayList();
+        
             try
             {
                 if(customer != null)
                 {
-      
-                    order.SetCustomerID(customer.GetID());
-                    manager.CreateCustomerOrder(order.GetID(), customer.GetID(),currentDate,currentTime);
+                    orders = manager.GetAllCustomerOrders(customer.GetID());
                 } else if (staff != null)
                 {
-                    order.SetStaffID(staff.GetID());
-                    manager.CreateCustomerOrder(order.GetID(), customer.GetID(),currentDate,currentTime);
-                } else 
+                    orders = manager.GetAllStaffOrders(staff.GetID());
+                } else if (session.getAttribute("guest") != null)
                 {
-                    int guestID = manager.GenerateNewGuestID();
-                    System.out.println(guestID);
-                    session.setAttribute("guest", guestID);
-                    order.SetGuestID(guestID);
-                    manager.CreateGuestOrder(order.GetID(), guestID,currentDate, currentTime);
+                    int guestID = (Integer)session.getAttribute("guest");
+                                        System.out.println(guestID + "showing");
+                    orders = manager.GetAllGuestOrders(guestID);
                 }
-                
-
-                for(Product product : order.GetProducts())
-                {
-                    manager.AddProductToOrder(order.GetID(), product.getProduct_ID());
-                }
-                
-
-
             }
              catch(SQLException ex)
             {
                 System.out.println(ex);
             } 
-        
-
-            session.setAttribute("saveSubmitOrder", "Your Order has been successfully saved.");
-            request.getRequestDispatcher("Order.jsp").forward(request,response);
+            session.setAttribute("allOrders", orders);
+            request.getRequestDispatcher("ShowOrders.jsp").forward(request,response);
     }
 }

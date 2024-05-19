@@ -35,7 +35,6 @@ public class OrderServlet  extends HttpServlet{
  
         HttpSession session = request.getSession();
         //retrieve the product name that was searched for by the user
-        Product product = (Product)session.getAttribute("product");
         DBManager manager = (DBManager) session.getAttribute("manager");
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
@@ -56,6 +55,7 @@ public class OrderServlet  extends HttpServlet{
             } else 
             {
                 int guestID = manager.GenerateNewGuestID();
+                session.setAttribute("guest", guestID);
                 order.SetGuestID(guestID);
                // manager.CreateGuestOrder(orderID, guestID);
             }

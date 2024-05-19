@@ -47,11 +47,11 @@
                 String saveSubmitOrder = (String)session.getAttribute("saveSubmitOrder");
     %>
     <div class="header">
-             <img src="css/IOTBAY Logo.png">
+        <a href="Index.jsp" style="background-color: transparent;"><img src="css/IOTBAY Logo.png"></a>
              <div class="dropdown" >
                 <button class="dropbtn"></button> 
                 <div class="dropdown-content">
-                    <a href ="#">Show Orders</a>
+                    <a href ="ShowOrderServlet">Show Orders</a>
                     <a href ="AccessLogServlet">Edit Profile</a>
                     <a href ="LogoutServlet">Logout</a>
                     <% if (staff != null){ %>
