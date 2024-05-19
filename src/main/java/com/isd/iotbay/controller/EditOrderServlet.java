@@ -30,7 +30,7 @@ public class EditOrderServlet  extends HttpServlet{
 //    private DBConnector Connector;
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) //Get selected order
             throws ServletException, IOException {
 
  
@@ -45,9 +45,6 @@ public class EditOrderServlet  extends HttpServlet{
         ArrayList<Order> orders = new ArrayList();
         request.setAttribute("saveSubmitOrder", null);
         
-        
-        
-        
             try
             {
                 if(customer != null)
@@ -58,6 +55,7 @@ public class EditOrderServlet  extends HttpServlet{
                     orders = manager.GetAllStaffOrders(staff.GetID());
                 } else 
                 {
+                    System.out.println("guest ");
                     int guestID = (int)session.getAttribute("guest");
                     orders = manager.GetAllGuestOrders(guestID);
                 }
@@ -67,6 +65,7 @@ public class EditOrderServlet  extends HttpServlet{
             {
                 if(request.getParameter(Integer.toString(ord.GetID())) != null)
                 {
+                    System.out.println("found order");
                     session.setAttribute("currentOrder", ord);
                     break;
                 }
@@ -119,7 +118,7 @@ public class EditOrderServlet  extends HttpServlet{
         {
              try
             {
-                    order.UpdateOrder(address, false);
+                    order.SetAddress(address);
                     manager.UpdateOrder(order.GetID(), order.GetDate(), order.GetTime(), address);
             }
              catch(SQLException ex)

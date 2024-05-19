@@ -62,10 +62,13 @@
             </div>
         </form>
                 
-         
+                <%if(!currentOrder.IsSubmitted()) {%>
                 <a href="RemoveProductFromOrderServlet">Update Products</a>
                 <a href="SubmitOrderServlet">Submit Order</a>
-
+                <a href="ExistingOrderServlet">Add Product to Order</a>
+                 <%} else {%>
+                 <h3> Order submitted! </h3>
+                 <% } %>
     
     </body>
 

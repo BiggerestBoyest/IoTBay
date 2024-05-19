@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,46 +24,47 @@ import javax.servlet.http.HttpSession;
  *
  * @author jogun
  */
-public class ShowOrderServlet  extends HttpServlet{
+public class AddProductToExistingOrderServlet  extends HttpServlet{
 //     private DBManager manager;
 //    private DBConnector Connector;
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
  
-       HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         //retrieve the product name that was searched for by the user
         DBManager manager = (DBManager) session.getAttribute("manager");
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
+        ArrayList<Product> products = new ArrayList();
+        session.setAttribute("addedProduct", null);
         
-        String saveOrder = request.getParameter("saveOrder");
-        ArrayList<Order> orders = new ArrayList();
-        
-            try
+        try
+        {
+            products = manager.showCollection();
+            
+            for(Product product : products)
             {
-                if(customer != null)
+                if(request.getParameter(Integer.toString(product.getProduct_ID())) != null)
                 {
-                    System.out.println("show");
-                    orders = manager.GetAllCustomerOrders(customer.GetID());
-                } else if (staff != null)
-                {
-                    orders = manager.GetAllStaffOrders(staff.GetID());
-                } else if (session.getAttribute("guest") != null)
-                {
-                    int guestID = (Integer)session.getAttribute("guest");
-                                        System.out.println(guestID + "showing");
-                    orders = manager.GetAllGuestOrders(guestID);
+                    order.AddProduct(product);
+                    System.out.println("added product");
+                   // manager.AddProductToOrder(order.GetID(), product.getProduct_ID());
+                    session.setAttribute("addedProduct", product.getProduct_name() + " was added to your order.");
+                    break;
                 }
             }
-             catch(SQLException ex)
-            {
-                System.out.println(ex);
-            } 
-            session.setAttribute("allOrders", orders);
-            request.getRequestDispatcher("ShowOrders.jsp").forward(request,response);
+            
+        } catch(SQLException ex){System.out.println(ex);}
+        
+        session.setAttribute("currentOrder", order);
+        request.getRequestDispatcher("ExistingOrder.jsp").forward(request, response);
+  
+        
+        
+        
     }
 }

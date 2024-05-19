@@ -46,13 +46,14 @@ public class RemoveProductFromOrderServlet  extends HttpServlet{
         
             try
             {
-                        ArrayList<Product> products = manager.GetAllProductsFromOrder(order.GetID());
-
+                ArrayList<Product> products = manager.GetAllProductsFromOrder(order.GetID());
+                order.SetProducts(products);
                     
             for(Product pro : products)
             {
                 if(request.getParameter(Integer.toString(pro.getProduct_ID())) != null)
                 {
+                    System.out.println("found product " + pro.getProduct_name());
                    product = pro;
                     break;
                 }
@@ -60,7 +61,10 @@ public class RemoveProductFromOrderServlet  extends HttpServlet{
                
                 if(product != null) {
                     manager.RemoveProductFromOrder(order.GetID(), product.getProduct_ID());
-                    order.RemoveProduct(product);
+                    
+                    System.out.println(order.GetProducts().get(0).getProduct_name());
+                    
+                    order.RemoveProduct(product.getProduct_ID());
                 }
             }
              catch(SQLException ex)

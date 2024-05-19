@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +24,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author jogun
  */
-public class ShowOrderServlet  extends HttpServlet{
+public class SubmitOrderServlet  extends HttpServlet{
 //     private DBManager manager;
 //    private DBConnector Connector;
     
@@ -34,37 +33,26 @@ public class ShowOrderServlet  extends HttpServlet{
             throws ServletException, IOException {
 
  
-       HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         //retrieve the product name that was searched for by the user
         DBManager manager = (DBManager) session.getAttribute("manager");
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
+        try
+        {
+            manager.SubmitOrder(order.GetID());
+            order.SetAsSubmitted();
+        }
+         catch(SQLException ex)
+        {
+            System.out.println(ex);
+        }
         
-        String saveOrder = request.getParameter("saveOrder");
-        ArrayList<Order> orders = new ArrayList();
+        session.setAttribute("currentOrder", order);
+        request.getRequestDispatcher("Order.jsp").forward(request,response);
         
-            try
-            {
-                if(customer != null)
-                {
-                    System.out.println("show");
-                    orders = manager.GetAllCustomerOrders(customer.GetID());
-                } else if (staff != null)
-                {
-                    orders = manager.GetAllStaffOrders(staff.GetID());
-                } else if (session.getAttribute("guest") != null)
-                {
-                    int guestID = (Integer)session.getAttribute("guest");
-                                        System.out.println(guestID + "showing");
-                    orders = manager.GetAllGuestOrders(guestID);
-                }
-            }
-             catch(SQLException ex)
-            {
-                System.out.println(ex);
-            } 
-            session.setAttribute("allOrders", orders);
-            request.getRequestDispatcher("ShowOrders.jsp").forward(request,response);
     }
+    
+   
 }

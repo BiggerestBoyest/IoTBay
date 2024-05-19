@@ -49,12 +49,16 @@ public class SaveOrderServlet  extends HttpServlet{
         
         order.SetDate(currentDate);
         order.SetTime(currentTime);
+        
+        
+        
             try
             {
                 if(customer != null)
                 {
       
                     order.SetCustomerID(customer.GetID());
+                    System.out.print(order.GetProducts().get(0).getProduct_name() + " NAME");
                     manager.CreateCustomerOrder(order.GetID(), customer.GetID(),currentDate,currentTime);
                 } else if (staff != null)
                 {
@@ -83,7 +87,7 @@ public class SaveOrderServlet  extends HttpServlet{
                 System.out.println(ex);
             } 
         
-
+            session.setAttribute("currentOrder",order);
             session.setAttribute("saveSubmitOrder", "Your Order has been successfully saved.");
             request.getRequestDispatcher("Order.jsp").forward(request,response);
     }

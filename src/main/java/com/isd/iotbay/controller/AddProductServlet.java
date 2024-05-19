@@ -55,10 +55,12 @@ public class AddProductServlet extends HttpServlet {
         Double cost = Double.parseDouble(request.getParameter("Product_Cost"));
         Integer stock = Integer.parseInt(request.getParameter("Product_Stock"));
         String product_deliveryDate = request.getParameter("Product_DeliveryDate");
+        
     
     try {
         if (product_name != null) {
             manager.addProduct(product_name, cost, stock, product_deliveryDate); //call addNewItem and use the inputted values from admin user method in manager
+            session.setAttribute("allProducts",manager.showCollection());
             session.setAttribute("added", "Item has been added to Collection"); //set the attribute as successful (no error message)
 
             request.getRequestDispatcher("Collection_add.jsp").include(request, response); //request comes from the addNewItem.jsp

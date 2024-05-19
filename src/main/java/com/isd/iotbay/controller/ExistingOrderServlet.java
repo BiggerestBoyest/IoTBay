@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,14 +25,14 @@ import javax.servlet.http.HttpSession;
  *
  * @author jogun
  */
-public class AddProductToOrderServlet  extends HttpServlet{
+public class ExistingOrderServlet  extends HttpServlet{
 //     private DBManager manager;
 //    private DBConnector Connector;
     
+    
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)   throws ServletException, IOException 
+    {       
  
         HttpSession session = request.getSession();
         //retrieve the product name that was searched for by the user
@@ -39,32 +40,19 @@ public class AddProductToOrderServlet  extends HttpServlet{
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
-        ArrayList<Product> products = new ArrayList();
-        session.setAttribute("addedProduct", null);
-        
+        ArrayList<Product> allProducts = (ArrayList<Product>)session.getAttribute("allProducts");
         try
         {
-            products = manager.showCollection();
             
-            for(Product product : products)
-            {
-                if(request.getParameter(Integer.toString(product.getProduct_ID())) != null)
-                {
-                    order.AddProduct(product);
-                    System.out.println("added product");
-                   // manager.AddProductToOrder(order.GetID(), product.getProduct_ID());
-                    session.setAttribute("addedProduct", product.getProduct_name() + " was added to your order.");
-                    break;
-                }
-            }
-            
-        } catch(SQLException ex){System.out.println(ex);}
+            ArrayList<Product> products = manager.GetAllProductsFromOrder(order.GetID());
+            allProducts = manager.showCollection();
+            order.SetProducts(products);
+        } catch (SQLException ex){System.out.println(ex);}
         
-        session.setAttribute("currentOrder", order);
-        request.getRequestDispatcher("Order.jsp").forward(request, response);
-  
-        
-        
+        session.setAttribute("allProducts",allProducts);
+       session.setAttribute("currentOrder", order);
+       request.getRequestDispatcher("ExistingOrder.jsp").forward(request, response);
         
     }
 }
+

@@ -12,6 +12,8 @@ import com.isd.iotbay.Order;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +27,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author jogun
  */
-public class ShowOrderServlet  extends HttpServlet{
+public class UpdateExistingOrderServlet  extends HttpServlet{
 //     private DBManager manager;
 //    private DBConnector Connector;
     
@@ -40,31 +42,28 @@ public class ShowOrderServlet  extends HttpServlet{
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
-        
         String saveOrder = request.getParameter("saveOrder");
-        ArrayList<Order> orders = new ArrayList();
+        request.setAttribute("saveSubmitOrder", null);
+        String currentDate = LocalDate.now().toString();
+        String currentTime = LocalTime.now().toString();
+        
+        order.SetDate(currentDate);
+        order.SetTime(currentTime);
+        
+        
         
             try
             {
-                if(customer != null)
-                {
-                    System.out.println("show");
-                    orders = manager.GetAllCustomerOrders(customer.GetID());
-                } else if (staff != null)
-                {
-                    orders = manager.GetAllStaffOrders(staff.GetID());
-                } else if (session.getAttribute("guest") != null)
-                {
-                    int guestID = (Integer)session.getAttribute("guest");
-                                        System.out.println(guestID + "showing");
-                    orders = manager.GetAllGuestOrders(guestID);
-                }
+               manager.UpdateProductsInOrder(order.GetID(), order.GetProducts());
+
             }
              catch(SQLException ex)
             {
                 System.out.println(ex);
             } 
-            session.setAttribute("allOrders", orders);
-            request.getRequestDispatcher("ShowOrders.jsp").forward(request,response);
+        
+            session.setAttribute("currentOrder",order);
+            session.setAttribute("saveSubmitOrder", "Your Order has been successfully saved.");
+            request.getRequestDispatcher("ExistingOrder.jsp").forward(request,response);
     }
 }

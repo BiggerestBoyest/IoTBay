@@ -39,17 +39,14 @@
     <link rel="stylesheet" href="css/main.css">
    <%
                 Customer customer = (Customer)session.getAttribute("customer");
-                AccessLog currentLog = (AccessLog)session.getAttribute("currentLog");
                 Staff staff = (Staff)session.getAttribute("staff");
-                ArrayList<Product> products = (ArrayList<Product>)session.getAttribute("allProducts");
+                ArrayList<Product> products = (ArrayList<Product>) session.getAttribute("allProducts");
                 Order order = (Order) session.getAttribute("currentOrder");
                 String addedProduct = (String)session.getAttribute("addedProduct");
                 String saveSubmitOrder = (String)session.getAttribute("saveSubmitOrder");
-                ArrayList<Order> orders = (ArrayList<Order>)session.getAttribute("allOrders");
-                
     %>
     <div class="header">
-        <a href="Index.jsp" style="background-color: transparent;"><img src="css/IOTBAY Logo.png"></a>
+        <a href="Index.jsp" style="background-color: transparent;">s<img src="css/IOTBAY Logo.png"></a>
              <div class="dropdown" >
                 <button class="dropbtn"></button> 
                 <div class="dropdown-content">
@@ -73,32 +70,50 @@
              </div>
         </div>
     <body>
-
-        <form action="ShowOrderByFilterServlet" method="get">
-            <input type="text" name="targetOrderID" style="width:20%">
-            <input type="submit" name="GetOrderByID" value="Search by ID">
-            <input type="date" name="targetDate" style="width:20%">
-            <input type="submit" name="GetOrderByDate" value="Search by Date">
-        </form>
         <div id="content">
             <div id="buttonContainer">
-                
+                <table>
+                    <a href="Collection_search.jsp">Search product</a>
                     
-                    <form action="EditOrderServlet" method="get">
+                    <form action="AddProductToExistingOrderServlet" method="post" >       
+
             <%
-                if (orders != null){
-                    for (Order ord : orders){
+                if (products != null){
+                    for (Product pro : products){
             %>
             
             <tr>
-                <td><h4>Order #: <%=ord.GetID() %></h4></td>
-                <td><input type="submit" name="<%=ord.GetID()%>" value="Edit Order"></td>
+                <td><input type="submit" name="<%=pro.getProduct_ID()%>" value="<%=pro.getProduct_ID()%>"></td>
+                <td><p><%=pro.getProduct_ID()%></p></td>
+                <td><p><%=pro.getProduct_name()%></p></td>
+                <td><p><%=pro.getCost()%></p></td>
+                <td><p><%=Integer.toString(pro.getProduct_stock())%></p></td>
+                <td><p><%=pro.getProduct_deliveryDate()%></p></td>
+                        
             </tr>
-                <%}} else {%>
-                <h3>No orders found!</h3>
-                <%}%>
+                <%}}%>
                          </form>   
-         
+                </table>
+        <span><%=(addedProduct != null ? addedProduct : "")%></span>
+            </div>
+            <h2> Your Current Order</h2>
+            <table>
+            <%
+                if (order != null){
+                    for (Product pro : order.GetProducts()){
+            %>
+            
+            <tr>
+                <td><h5><%=pro.getProduct_name()%></h5></td>
+                        
+            </tr>
+                <%}}%>
+                </table>
+                <div>
+                    <a href="UpdateExistingOrderServlet">Save Order</a>
+
+                <span><%=(saveSubmitOrder != null ? saveSubmitOrder : "")%></span>
+                </div>
         </div>
    </body>
 </html>

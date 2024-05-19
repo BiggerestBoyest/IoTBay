@@ -23,7 +23,7 @@ public class Order
     private String _timeOfOrder;
     private String _address;
     private String _invoice;
-    public boolean _isSubmitted = false;
+    private boolean _isSubmitted = false;
 
     public Order(int orderID, int customerID,String dateOfOrder,String timeOfOrder, String deliveryAddress)
     {
@@ -45,15 +45,29 @@ public class Order
     public void SetCustomerID(int newID) {_customerID = newID;}
     public void SetStaffID(int newID) {_staffID = newID;}
     public void SetGuestID(int newID) {_guestID = newID;}
+    public void SetAddress(String address) {_address = address;}
     public void SetTime(String time) {_timeOfOrder = time;}
     public void SetDate(String date) {_dateOfOrder = date;}
     public void AddProduct(Product product) {_products.add(product);}
-    public void RemoveProduct(Product product) {_products.remove(product);}
-    public void UpdateOrder( String deliveryAddress, boolean isSubmitted){_address = deliveryAddress; _isSubmitted = isSubmitted;}
+    public void SetProducts(ArrayList<Product> products) {_products = products;}
+    public void RemoveProduct(int productID) 
+    {
+        Product target = null;
+        for(Product product : _products)
+        {
+            System.out.println("PRODUCTS: " + product.getProduct_name());
+            if(product.getProduct_ID() == productID)
+                target = product;
+        }
+        
+        _products.remove(target);
+    
+    }
+    public void SetAsSubmitted(){_isSubmitted = true;}
     public String GetAddress(){return _address;}
     public String GetDate(){return _timeOfOrder;}
     public String GetTime(){return _dateOfOrder;}
-
+    public boolean IsSubmitted() {return _isSubmitted;}
     
      public String GetStreetNumber()
     {

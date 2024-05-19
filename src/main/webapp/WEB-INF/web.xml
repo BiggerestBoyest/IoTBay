@@ -100,9 +100,38 @@
         <servlet-class>com.isd.iotbay.controller.RemoveProductFromOrderServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+       <servlet>
+        <servlet-name>UpdateExistingOrderServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.UpdateExistingOrderServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+           <servlet>
+        <servlet-name>ShowOrderByFilterServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.ShowOrderByFilterServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitOrderServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.SubmitOrderServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     <servlet>
+        <servlet-name>ExistingOrderServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.ExistingOrderServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+         <servlet>
+        <servlet-name>AddProductToExistingOrderServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.AddProductToExistingOrderServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddProductToOrderServlet</servlet-name>
         <url-pattern>/AddProductToOrderServlet</url-pattern>
+    </servlet-mapping>
+       <servlet-mapping>
+        <servlet-name>SubmitOrderServlet</servlet-name>
+        <url-pattern>/SubmitOrderServlet</url-pattern>
     </servlet-mapping>
       <servlet-mapping>
         <servlet-name>RemoveProductFromOrderServlet</servlet-name>
@@ -112,6 +141,15 @@
         <servlet-name>EditOrderServlet</servlet-name>
         <url-pattern>/EditOrderServlet</url-pattern>
     </servlet-mapping>
+    
+       <servlet-mapping>
+        <servlet-name>AddProductToExistingOrderServlet</servlet-name>
+        <url-pattern>/AddProductToExistingOrderServlet</url-pattern>
+    </servlet-mapping>
+         <servlet-mapping>
+        <servlet-name>UpdateExistingOrderServlet</servlet-name>
+        <url-pattern>/UpdateExistingOrderServlet</url-pattern>
+    </servlet-mapping>
        <servlet-mapping>
         <servlet-name>ShowOrderServlet</servlet-name>
         <url-pattern>/ShowOrderServlet</url-pattern>
@@ -119,6 +157,14 @@
     <servlet-mapping>
         <servlet-name>AddProductServlet</servlet-name>
         <url-pattern>/AddProductServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExistingOrderServlet</servlet-name>
+        <url-pattern>/ExistingOrderServlet</url-pattern>
+    </servlet-mapping>
+      <servlet-mapping>
+        <servlet-name>ShowOrderByFilterServlet</servlet-name>
+        <url-pattern>/ShowOrderByFilterServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>OrderServlet</servlet-name>

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import com.isd.iotbay.AccessLog;
 import com.isd.iotbay.Order;
+import com.isd.iotbay.OrderProduct;
 import com.isd.iotbay.Product;
 
 public class DBManager 
@@ -516,6 +517,7 @@ public ArrayList<Product> ShowAllGuestOrders(int guestID) throws SQLException
 
 
 
+
 public void CreateCustomerOrder(int orderID, int customerID, String orderDate, String orderTime) throws SQLException 
 {
     String query = "INSERT INTO USERDB.Orders (ORDER_ID,FK_CUSTOMER_ID, DATE_OF_ORDER, TIME_OF_ORDER)" + " VALUES (" + orderID + ", " + customerID + ", '" + orderDate + "', '" + orderTime + "')";
@@ -558,6 +560,67 @@ public int GenerateNewOrderID() throws SQLException
     return count + 1; 
 }
 
+public ArrayList<Order> GetCustomerOrdersByDate(int customerID, String date) throws SQLException
+{
+     String query = "SELECT * FROM USERDB.ORDERS WHERE FK_CUSTOMER_ID= " + customerID + " AND DATE_OF_ORDER='" + date + "'";
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Order> orders = new ArrayList();
+
+    while (rs.next()) {
+        int orderID = rs.getInt(1);
+        int queriedCustomerID = rs.getInt(2);
+        String time = rs.getString(6);
+        String delivery = rs.getString(7);
+        orders.add(new Order(orderID,queriedCustomerID,date,time,delivery));
+    }
+
+    return orders;
+}
+
+
+public ArrayList<Order> GetStaffOrdersByDate(int staffID, String date) throws SQLException
+{
+     String query = "SELECT * FROM USERDB.ORDERS WHERE FK_STAFF_ID= " + staffID + " AND DATE_OF_ORDER='" + date + "'";
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Order> orders = new ArrayList();
+
+    while (rs.next()) {
+        int orderID = rs.getInt(1);
+        String time = rs.getString(6);
+        String delivery = rs.getString(7);
+        Order order = new Order(orderID);
+        order.SetStaffID(staffID);
+        order.SetDate(date);
+        order.SetTime(time);
+        order.SetAddress(delivery);
+        orders.add(order);
+    }
+
+    return orders;
+}
+
+
+public ArrayList<Order> GetGuestOrdersByDate(int guestID, String date) throws SQLException
+{
+     String query = "SELECT * FROM USERDB.ORDERS WHERE GUEST_ID= " + guestID + " AND DATE_OF_ORDER='" + date + "'";
+    ResultSet rs = statement.executeQuery(query);
+    ArrayList<Order> orders = new ArrayList();
+
+    while (rs.next()) {
+        int orderID = rs.getInt(1);
+        String time = rs.getString(6);
+        String delivery = rs.getString(7);
+        Order order = new Order(orderID);
+        order.SetGuestID(guestID);
+        order.SetDate(date);
+        order.SetTime(time);
+        order.SetAddress(delivery);
+        orders.add(order);
+    }
+
+    return orders;
+}
+
 public ArrayList<Order> GetAllCustomerOrders(int customerID) throws SQLException
 {
       String query = "SELECT * FROM USERDB.ORDERS WHERE FK_CUSTOMER_ID= " + customerID;
@@ -576,6 +639,8 @@ public ArrayList<Order> GetAllCustomerOrders(int customerID) throws SQLException
 
     return orders;
 }
+
+
 
 public ArrayList<Order> GetAllStaffOrders(int staffID) throws SQLException
 {
@@ -622,17 +687,26 @@ public void UpdateOrder(int orderID, String orderDate, String orderTime, String 
 
 }
 
-private ArrayList<Integer> GetAllProductsIDsFromOrder(int orderID) throws SQLException
+
+
+public void SubmitOrder(int orderID) throws SQLException
+{
+    String update = "UPDATE USERDB.ORDERS SET SUBMITTEDSTATUS= " + 1  + " WHERE ORDER_ID=" + orderID;
+    statement.executeUpdate(update);
+}
+
+private ArrayList<OrderProduct> GetAllProductsIDsFromOrder(int orderID) throws SQLException
 {
       String query = "SELECT * FROM USERDB.ORDER_PRODUCT WHERE ORDER_ID= " + orderID;
     ResultSet rs = statement.executeQuery(query);
-    ArrayList<Integer> ids = new ArrayList();
+    ArrayList<OrderProduct> ids = new ArrayList();
 
         while (rs.next()) {
         int productID = rs.getInt(2);
-        ids.add(productID);
+        int quantity = rs.getInt(3);
+        ids.add(new OrderProduct(orderID,productID,quantity));
      
-}
+        }
         
         return ids;
 }
@@ -670,27 +744,30 @@ public void RemoveProductFromOrder(int orderID, int productID) throws SQLExcepti
 
 
 public ArrayList<Product> GetAllProductsFromOrder(int orderID) throws SQLException {        
-    ArrayList<Integer> productIDs = GetAllProductsIDsFromOrder(orderID);
+    ArrayList<OrderProduct> productIDs = GetAllProductsIDsFromOrder(orderID);
     ArrayList<Product> products = new ArrayList();
     
     for(int i = 0; i < productIDs.size(); i++)
     {
-        String query = "SELECT * FROM USERDB.PRODUCTS WHERE PRODUCT_ID= " + productIDs.get(i);
-        ResultSet rs = statement.executeQuery(query);
-
-        int productID;
-        String productName;
-        double productCost;
-        int productStock;
-        String productDeliveryDate;
-        while(rs.next())
+        for(int j = 0; j < productIDs.get(i).GetQuantity(); j++)
         {
-            productID = rs.getInt(1);
-            productName=  rs.getString(2);
-            productCost = rs.getDouble(3);
-            productStock = rs.getInt(4);
-            productDeliveryDate = rs.getString(5);
-            products.add(new Product(productID,productName,productCost,productStock,productDeliveryDate));
+            String query = "SELECT * FROM USERDB.PRODUCTS WHERE PRODUCT_ID=" + productIDs.get(i).GetProductID();
+            ResultSet rs = statement.executeQuery(query);
+
+            int productID;
+            String productName;
+            double productCost;
+            int productStock;
+            String productDeliveryDate;
+            while(rs.next())
+            {
+                productID = rs.getInt(1);
+                productName=  rs.getString(2);
+                productCost = rs.getDouble(3);
+                productStock = rs.getInt(4);
+                productDeliveryDate = rs.getString(5);
+                products.add(new Product(productID,productName,productCost,productStock,productDeliveryDate));
+            }
         }
     }
 
@@ -725,9 +802,76 @@ public void AddProductToOrder(int orderID, int productID) throws SQLException
             statement.executeUpdate(updatedQuery);
 }
 
-public void UpdateCustomerOrder(int order, int customerID, String timeOfOrder, String deliveryAddress, String dateOfOrder) throws SQLException
+public void UpdateProductsInOrder(int orderID, ArrayList<Product> productIDs) throws SQLException
 {
-    String query = "SELECT * FROM USERDB.ORDERS ";
+    System.out.println("UPDATE PROR");
+     String updateQuery = "DELETE FROM USERDB.ORDER_PRODUCT WHERE ORDER_ID=" + orderID;
+    statement.executeUpdate(updateQuery);
+        for (Product product : productIDs) 
+        {
+            AddProductToOrder(orderID,product.getProduct_ID());
+        }
+    
+}
+
+public Order GetOrderFromCustomer(int orderID, int customerID ) throws SQLException
+{
+    String query = "SELECT * FROM USERDB.ORDERS WHERE ORDER_ID=" + orderID + " AND FK_CUSTOMER_ID=" + customerID;
+    ResultSet rs = statement.executeQuery(query);
+    
+    if(rs.next())
+    {
+        String date = rs.getString(5);
+        String time = rs.getString(6);
+        String deliveryAddress = rs.getString(7);
+        Order order =  new Order(orderID);
+        order.SetCustomerID(customerID);
+        order.SetTime(time);
+        order.SetDate(date);
+        order.SetAddress(deliveryAddress);
+        return order;
+    }
+    return null;
+}
+
+public Order GetOrderStaff(int orderID, int staffID ) throws SQLException
+{
+    String query = "SELECT * FROM USERDB.ORDERS WHERE ORDER_ID=" + orderID + " AND FK_STAFF_ID=" + staffID;
+    ResultSet rs = statement.executeQuery(query);
+    
+    if(rs.next())
+    {
+        String date = rs.getString(5);
+        String time = rs.getString(6);
+        String deliveryAddress = rs.getString(7);
+        Order order =  new Order(orderID);
+        order.SetCustomerID(staffID);
+        order.SetTime(time);
+        order.SetDate(date);
+        order.SetAddress(deliveryAddress);
+        return order;
+    }
+    return null;
+}
+
+public Order GetOrderFromGuest(int orderID, int guestID ) throws SQLException
+{
+    String query = "SELECT * FROM USERDB.ORDERS WHERE ORDER_ID=" + orderID + " AND GUEST_ID=" + guestID;
+    ResultSet rs = statement.executeQuery(query);
+    
+    if(rs.next())
+    {
+        String date = rs.getString(5);
+        String time = rs.getString(6);
+        String deliveryAddress = rs.getString(7);
+        Order order =  new Order(orderID);
+        order.SetCustomerID(guestID);
+        order.SetTime(time);
+        order.SetDate(date);
+        order.SetAddress(deliveryAddress);
+        return order;
+    }
+    return null;
 }
 
 
