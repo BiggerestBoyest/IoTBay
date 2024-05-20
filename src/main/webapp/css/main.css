@@ -74,7 +74,7 @@ input[required=true]
 
 .dropdown
 {
-    position:absolute;
+    position:fixed;
     top: 60px;
     right: 35px;
     display:inline-block;
@@ -157,8 +157,10 @@ thead{
 {
     margin: auto;
     width: 50%;
+    height: 100%;
     padding:10px;
     text-align: center;
+    background-color: transparent;
 }
 img
 {

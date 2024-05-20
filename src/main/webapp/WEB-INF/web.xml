@@ -11,6 +11,21 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet>
+        <servlet-name>PaymentMethodServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.PaymentMethodServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+       <servlet>
+        <servlet-name>ShowPaymentMethodServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.ShowPaymentMethodServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+       <servlet>
+        <servlet-name>AddPaymentMethodToOrderServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.AddPaymentMethodToOrderServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>com.isd.iotbay.controller.RegisterServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -110,6 +125,36 @@
         <servlet-class>com.isd.iotbay.controller.ShowOrderByFilterServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+     <servlet>
+        <servlet-name>CreateShipmentServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.CreateShipmentServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteShipmentServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.DeleteShipmentServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchShipmentServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.SearchShipmentServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateShipmentServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.UpdateShipmentServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     <servlet>
+        <servlet-name>ViewShipmentServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.ViewShipmentServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>EditPaymentMethodServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.EditPaymentMethodServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet>
         <servlet-name>SubmitOrderServlet</servlet-name>
         <servlet-class>com.isd.iotbay.controller.SubmitOrderServlet</servlet-class>
@@ -133,6 +178,26 @@
         <servlet-name>SubmitOrderServlet</servlet-name>
         <url-pattern>/SubmitOrderServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateShipmentServlet</servlet-name>
+        <url-pattern>/CreateShipmentServlet</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>DeleteShipmentServlet</servlet-name>
+        <url-pattern>/DeleteShipmentServlet</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>SearchShipmentServlet</servlet-name>
+        <url-pattern>/SearchShipmentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateShipmentServlet</servlet-name>
+        <url-pattern>/UpdateShipmentServlet</url-pattern>
+    </servlet-mapping>
+      <servlet-mapping>
+        <servlet-name>ViewShipmentServlet</servlet-name>
+        <url-pattern>/ViewShipmentServlet</url-pattern>
+    </servlet-mapping>
       <servlet-mapping>
         <servlet-name>RemoveProductFromOrderServlet</servlet-name>
         <url-pattern>/RemoveProductFromOrderServlet</url-pattern>
@@ -145,6 +210,22 @@
        <servlet-mapping>
         <servlet-name>AddProductToExistingOrderServlet</servlet-name>
         <url-pattern>/AddProductToExistingOrderServlet</url-pattern>
+    </servlet-mapping>
+      <servlet-mapping>
+        <servlet-name>ShowPaymentMethodServlet</servlet-name>
+        <url-pattern>/ShowPaymentMethodServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentMethodServlet</servlet-name>
+        <url-pattern>/PaymentMethodServlet</url-pattern>
+    </servlet-mapping>
+       <servlet-mapping>
+        <servlet-name>EditPaymentMethodServlet</servlet-name>
+        <url-pattern>/EditPaymentMethodServlet</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>AddPaymentMethodToOrderServlet</servlet-name>
+        <url-pattern>/AddPaymentMethodToOrderServlet</url-pattern>
     </servlet-mapping>
          <servlet-mapping>
         <servlet-name>UpdateExistingOrderServlet</servlet-name>

@@ -81,7 +81,7 @@
             <input type="submit" name="GetOrderByDate" value="Search by Date">
         </form>
         <div id="content">
-            <div id="buttonContainer">
+            <div id="">
                 
                     
                     <form action="EditOrderServlet" method="get">

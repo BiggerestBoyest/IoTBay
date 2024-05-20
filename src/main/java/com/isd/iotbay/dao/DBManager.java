@@ -8,7 +8,9 @@ import java.util.Random;
 import com.isd.iotbay.AccessLog;
 import com.isd.iotbay.Order;
 import com.isd.iotbay.OrderProduct;
+import com.isd.iotbay.PaymentMethod;
 import com.isd.iotbay.Product;
+import com.isd.iotbay.Shipment;
 
 public class DBManager 
 {
@@ -268,6 +270,8 @@ public class DBManager
         System.out.println(logID + " log id");
         statement.executeUpdate(query);
     }
+    
+     
     
       public void GenerateNewAccessLog(int logID,  String loginDate, String loginTime, int staffID) throws SQLException
     {
@@ -578,6 +582,85 @@ public ArrayList<Order> GetCustomerOrdersByDate(int customerID, String date) thr
     return orders;
 }
 
+public void AddPaymentMethodToCustomer(int paymentID, int customerID, String nameOnCard, String cardNumber, String expiryDate, String dateCreated,  int cvs) throws SQLException
+{
+    String updatedQuery = "INSERT INTO USERDB.PAYMENTMETHODS (PAYMENT_ID, FK_CUSTOMER_ID, NAME_ON_CARD, CARD_NUMBER, EXPIRY_DATE, CVS, DATE_CREATED)" + " VALUES (" + paymentID + ", " + customerID +  ", '" + nameOnCard +  "', '" + cardNumber + "', '"  + expiryDate + "', " + cvs  + ", '" + dateCreated +  "')";
+    statement.executeUpdate(updatedQuery);
+}
+
+public void AddPaymentMethodToStaff(int paymentID, int staffID, String nameOnCard, String cardNumber, String expiryDate, String dateCreated,  int cvs) throws SQLException
+{
+    String updatedQuery = "INSERT INTO USERDB.PAYMENTMETHODS (PAYMENT_ID, FK_STAFF_ID, NAME_ON_CARD, CARD_NUMBER, EXPIRY_DATE, CVS, DATE_CREATED)" + " VALUES (" + paymentID + ", " + staffID +  ", '" + nameOnCard +  "', '" + cardNumber + "', '"  + expiryDate + "', " + cvs  + ", '" + dateCreated +  "')";
+    statement.executeUpdate(updatedQuery);
+}
+
+public void UpdatePaymentMethod(int paymentID, String nameOnCard, String cardNumber, String expiryDate, int cvs) throws SQLException
+{
+    String query = "UPDATE USERDB.PAYMENTMETHODS SET NAME_ON_CARD = '" + nameOnCard + "', CARD_NUMBER='" + cardNumber +"', EXPIRY_DATE='" +expiryDate + "', CVS=" + cvs + " WHERE PAYMENT_ID=" + paymentID;
+    statement.executeUpdate(query);
+}
+
+public void RemovePaymentMethod(int paymentID) throws SQLException
+{
+    String query = "DELETE FROM USERDB.PAYMENTMETHODS WHERE PAYMENT_ID=" + paymentID;
+    statement.executeUpdate(query);
+}
+
+public void LinkPaymentMethodToOrder(int paymentID, int orderID) throws SQLException
+{
+    String query = "UPDATE USERDB.PAYMENTMETHODS SET FK_ORDER_ID =" + orderID +  " WHERE PAMENT_ID=" + paymentID;
+    statement.executeUpdate(query);
+}
+
+public ArrayList<PaymentMethod> GetAllPaymentMethodsForCustomer(int customerID) throws SQLException
+{
+    String query = "SELECT * FROM USERDB.PAYMENTMETHODS WHERE FK_CUSTOMER_ID=" + customerID;
+    ResultSet rs = statement.executeQuery(query);
+        ArrayList<PaymentMethod> payments = new ArrayList();
+
+    while(rs.next())
+    {
+        int paymentID = rs.getInt(1);
+        int orderID = rs.getInt(2);
+        String nameOnCard = rs.getString(3);
+        String cardNumber = rs.getString(4);
+        String expiryDate = rs.getString(5);
+        int cvs = rs.getInt(6);
+        String dateCreated = rs.getString(7);
+        PaymentMethod method = new PaymentMethod(paymentID,nameOnCard,cardNumber,expiryDate,String.valueOf(cvs),dateCreated);
+        method.SetCustomerID(customerID);
+        method.SetOrderID(orderID);
+        payments.add(method);
+    }
+    
+    return payments;
+    
+}
+
+public ArrayList<PaymentMethod> GetAllPaymentMethodsForStaff(int staffID) throws SQLException
+{
+    String query = "SELECT * FROM USERDB.PAYMENTMETHODS WHERE FK_STAFF_ID=" + staffID;
+    ResultSet rs = statement.executeQuery(query);
+        ArrayList<PaymentMethod> payments = new ArrayList();
+
+    while(rs.next())
+    {
+        int paymentID = rs.getInt(1);
+        int orderID = rs.getInt(2);
+        String nameOnCard = rs.getString(3);
+        String cardNumber = rs.getString(4);
+        String expiryDate = rs.getString(5);
+        int cvs = rs.getInt(6);
+        String dateCreated = rs.getString(7);
+        PaymentMethod method = new PaymentMethod(paymentID,nameOnCard,cardNumber,expiryDate,String.valueOf(cvs),dateCreated);
+        method.SetOrderID(orderID);
+        method.SetStaffID(staffID);
+        payments.add(method);
+    }
+    
+    return payments;
+    
+}
 
 public ArrayList<Order> GetStaffOrdersByDate(int staffID, String date) throws SQLException
 {
@@ -878,6 +961,32 @@ public Order GetOrderStaff(int orderID, int staffID ) throws SQLException
     return null;
 }
 
+public int GeneratePaymentID() throws SQLException 
+{
+    String query = "SELECT PAYMENT_ID FROM USERDB.PAYMENTMETHODS";
+    ResultSet rs = statement.executeQuery(query);
+    int count = 0;
+    while(rs.next())
+        count++;
+    
+    return count;
+    
+}
+
+public void AddPaymentToOrder(int paymentID, int orderID) throws SQLException
+{
+    
+    
+    String update = "UPDATE USERDB.PAYMENTMETHODS SET FK_ORDER_ID=" + orderID + " WHERE PAYMENT_ID=" + paymentID;
+    statement.executeUpdate(update);
+}
+
+public void RemovePaymentFromOrder(int paymentID, int orderID) throws SQLException
+{
+    String update = "UPDATE USERDB.PAYMENTMETHODS SET FK_ORDER_ID=" + null + " WHERE PAYMENT_ID=" + paymentID;
+    statement.executeUpdate(update);
+}
+
 public Order GetOrderFromGuest(int orderID, int guestID ) throws SQLException
 {
     String query = "SELECT * FROM USERDB.ORDERS WHERE ORDER_ID=" + orderID + " AND GUEST_ID=" + guestID;
@@ -899,6 +1008,25 @@ public Order GetOrderFromGuest(int orderID, int guestID ) throws SQLException
         return order;
     }
     return null;
+}
+
+public PaymentMethod GetPaymentFromOrder(int orderID) throws SQLException
+{
+    String query = "SELECT * FROM USERDB.PAYMENTMETHODS WHERE FK_ORDER_ID=" + orderID;
+    ResultSet rs = statement.executeQuery(query);
+    PaymentMethod method = null;
+    
+    if(rs.next())
+    {
+        int paymentID = rs.getInt(1);
+        String nameOnCard = rs.getString(3);
+        String cardNumber = rs.getString(4);
+        String expiryDate = rs.getString(5);
+        int cvs = rs.getInt(6);
+        String dateCreated = rs.getString(9);
+        method = new PaymentMethod(paymentID,nameOnCard, cardNumber, expiryDate, Integer.toString(cvs),dateCreated);
+    }
+    return method;
 }
 
 
@@ -927,8 +1055,83 @@ public void decreaseStock(int productid, int quantity) throws SQLException {
     statement.executeUpdate(query);
 }
         
-    
+ public void addShipment(int shipmentID, int orderID, String shipmentMethod, String shipmentDate, String shipmentAddress) throws SQLException {
+        String query = "INSERT INTO USERDB.SHIPMENT (SHIPMENT_ID,FK_ORDER_ID, SHIPMENT_METHOD, SHIPMENT_DATE, SHIPMENT_ADDRESS) " +
+                       "VALUES (" + shipmentID + ", " + orderID + ", '" + shipmentMethod + "', '" + shipmentDate + "', '" + shipmentAddress + "')";
+        statement.executeUpdate(query);
+    }
 
- 
+    public void deleteShipment(int shipmentID) throws SQLException {
+        String query = "DELETE FROM USERDB.SHIPMENT WHERE SHIPMENT_ID = " + shipmentID;
+        statement.executeUpdate(query);
+    }
+
+    public void updateShipment(int shipmentID, int orderID, String shipmentMethod, String shipmentDate, String shipmentAddress) throws SQLException {
+        String query = "UPDATE USERDB.SHIPMENT SET FK_ORDER_ID = " + orderID + 
+                       ", SHIPMENT_METHOD = '" + shipmentMethod + 
+                       "', SHIPMENT_DATE = '" + shipmentDate + 
+                       "', SHIPMENT_ADDRESS = '" + shipmentAddress + 
+                       "' WHERE SHIPMENT_ID = " + shipmentID;
+        statement.executeUpdate(query);
+    }
+
+    public Shipment findShipmentById(int shipmentID) throws SQLException {
+        String query = "SELECT * FROM USERDB.SHIPMENT WHERE SHIPMENT_ID = " + shipmentID;
+        ResultSet rs = statement.executeQuery(query);
+        if (rs.next()) {
+            return new Shipment(
+                rs.getInt(1),
+                rs.getInt(2),
+                rs.getString(3),
+                rs.getString(4),
+                rs.getString(5)
+            );
+        }
+        return null;
+    }
+
+    public ArrayList<Shipment> findShipmentsByDate(String shipmentDate) throws SQLException {
+        String query = "SELECT * FROM USERDB.SHIPMENT WHERE SHIPMENT_DATE = '" + shipmentDate + "'";
+        ResultSet rs = statement.executeQuery(query);
+        ArrayList<Shipment> shipments = new ArrayList<>();
+        while (rs.next()) {
+            shipments.add(new Shipment(
+                rs.getInt(1),
+                rs.getInt(2),
+                rs.getString(3),
+                rs.getString(4),
+                rs.getString(5)
+            ));
+        }
+        return shipments;
+    }
+    
+    public int GetShipmentID() throws SQLException
+    {
+        String query = "SELECT SHIPMENT_ID FROM USERDB.SHIPMENT ORDER BY SHIPMENT_ID";
+        ResultSet rs = statement.executeQuery(query);
+        int count = 0;
+        
+        while (rs.next()) 
+            count++;
+        
+        return count;
+    }
+
+    public ArrayList<Shipment> getAllShipments() throws SQLException {
+        String query = "SELECT * FROM USERDB.SHIPMENT ORDER BY SHIPMENT_ID";
+        ResultSet rs = statement.executeQuery(query);
+        ArrayList<Shipment> shipments = new ArrayList<>();
+        while (rs.next()) {
+            shipments.add(new Shipment(
+                rs.getInt(1),
+                rs.getInt(2),
+                rs.getString(3),
+                rs.getString(4),
+                rs.getString(5)
+            ));
+        }
+        return shipments;
+    }
 
 }

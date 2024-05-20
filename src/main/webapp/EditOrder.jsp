@@ -66,6 +66,7 @@
                 <a href="RemoveProductFromOrderServlet">Update Products</a>
                 <a href="SubmitOrderServlet">Submit Order</a>
                 <a href="ExistingOrderServlet">Add Product to Order</a>
+                <a href="ShowPaymentMethodServlet">Add/Update Payment Method</a>
                  <%} else {%>
                  <h3> Order submitted! </h3>
                  <% } %>
