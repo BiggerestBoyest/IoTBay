@@ -11,6 +11,7 @@ import com.isd.iotbay.OrderProduct;
 import com.isd.iotbay.PaymentMethod;
 import com.isd.iotbay.Product;
 import com.isd.iotbay.Shipment;
+import java.util.List;
 
 public class DBManager 
 {
@@ -492,7 +493,10 @@ public ArrayList<Product> showCollection() throws SQLException {
         int item_stock = rs.getInt(4);
         String item_deliveryDate = rs.getString(5);
         System.out.println(item_productname);
-
+        
+        if(item_stock <= 0)
+            continue;
+        
         inventory.add(new Product(item_productid, item_productname, item_price, item_stock, item_deliveryDate));
     }
 
@@ -975,8 +979,6 @@ public int GeneratePaymentID() throws SQLException
 
 public void AddPaymentToOrder(int paymentID, int orderID) throws SQLException
 {
-    
-    
     String update = "UPDATE USERDB.PAYMENTMETHODS SET FK_ORDER_ID=" + orderID + " WHERE PAYMENT_ID=" + paymentID;
     statement.executeUpdate(update);
 }
@@ -1051,7 +1053,7 @@ private ArrayList<Product> ShowAllOrders(String query) throws SQLException {
 
 
 public void decreaseStock(int productid, int quantity) throws SQLException {
-    String query = "UPDATE USERDB.PRODUCTS SET STOCK = (SELECT STOCK FROM ISDUSER.PRODUCT WHERE PRODUCT_ID = "+productid+") - "+quantity+" WHERE PRODUCT_ID = "+productid+"";
+    String query = "UPDATE USERDB.PRODUCTS SET PRODUCT_STOCK = (SELECT PRODUCT_STOCK FROM USERDB.PRODUCTS WHERE PRODUCT_ID = "+productid+") - "+quantity+" WHERE PRODUCT_ID = "+productid+"";
     statement.executeUpdate(query);
 }
         
@@ -1104,6 +1106,37 @@ public void decreaseStock(int productid, int quantity) throws SQLException {
             ));
         }
         return shipments;
+    }
+    
+    
+    public List<Shipment> GetAllShipmentsFromOrder(int orderID) throws SQLException
+    {
+        String query = "SELECT * FROM USERDB.SHIPMENT WHERE FK_ORDER_ID=" + orderID;
+        ResultSet rs = statement.executeQuery(query);
+        ArrayList<Shipment> shipments = new ArrayList<>();
+        
+        while (rs.next()) {
+            shipments.add(new Shipment(
+                rs.getInt(1),
+                rs.getInt(2),
+                rs.getString(3),
+                rs.getString(4),
+                rs.getString(5)
+            ));
+        }
+        return shipments;
+        
+    }
+    public void addShipmentToOrder(int shipmentID, int orderID) throws SQLException
+    {
+        String update = "UPDATE USERDB.SHIPMENT SET FK_ORDER_ID=" + orderID + " WHERE SHIPMENT_ID=" + shipmentID;
+        statement.executeUpdate(update);
+    }
+    
+     public void removeShipmentFromOrder(int shipmentID, int orderID) throws SQLException
+    {
+        String update = "UPDATE USERDB.SHIPMENT SET FK_ORDER_ID=" + null + " WHERE SHIPMENT_ID=" + shipmentID;
+        statement.executeUpdate(update);       
     }
     
     public int GetShipmentID() throws SQLException

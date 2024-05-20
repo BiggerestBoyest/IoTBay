@@ -26,7 +26,6 @@ public class CreateShipmentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
-        int orderID = Integer.parseInt(request.getParameter("orderID"));
         String shipmentMethod = request.getParameter("shipmentMethod");
         String shipmentDate = request.getParameter("shipmentDate");
         String shipmentAddress = request.getParameter("shipmentAddress");
@@ -41,7 +40,7 @@ public class CreateShipmentServlet extends HttpServlet {
             int shipmentID = manager.GetShipmentID();
             manager.addShipment(shipmentID,order.GetID(), shipmentMethod, shipmentDate, shipmentAddress);
             session.setAttribute("added", "Shipment added successfully.");
-            Shipment shipment = new Shipment(shipmentID,orderID,shipmentMethod,shipmentDate,shipmentAddress);
+            Shipment shipment = new Shipment(shipmentID,order.GetID(),shipmentMethod,shipmentDate,shipmentAddress);
             request.getRequestDispatcher("addShipment.jsp").forward(request, response);
         } catch (SQLException e) {;
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "An error occurred: {0}", e.getMessage());

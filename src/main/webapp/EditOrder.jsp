@@ -63,10 +63,12 @@
         </form>
                 
                 <%if(!currentOrder.IsSubmitted()) {%>
-                <a href="RemoveProductFromOrderServlet">Update Products</a>
-                <a href="SubmitOrderServlet">Submit Order</a>
-                <a href="ExistingOrderServlet">Add Product to Order</a>
-                <a href="ShowPaymentMethodServlet">Add/Update Payment Method</a>
+                <a href="RemoveProductFromOrderServlet">Update Products </a><label>|</label>
+                <a href="SubmitOrderServlet">Submit Order</a><label>|</label>
+                <a href="ExistingOrderServlet">Add Product to Order<label>|</label>
+                <a href="ShowPaymentMethodServlet">Add/Update Payment Method</a> <label>|</label>
+                <a href="ViewShipmentServlet">Add Shipment Details
+
                  <%} else {%>
                  <h3> Order submitted! </h3>
                  <% } %>

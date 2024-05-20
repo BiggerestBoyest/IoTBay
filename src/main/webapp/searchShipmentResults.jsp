@@ -30,8 +30,8 @@
                     for (Shipment shipment : shipments) {
             %>
             <tr>
-                <td><%= shipment.getShipmentID() %></td>
-                <td><%= shipment.getOrderID() %></td>
+                <td><%= shipment.getshipmentID()%></td>
+                <td><%= shipment.getorderID() %></td>
                 <td><%= shipment.getShipmentMethod() %></td>
                 <td><%= shipment.getShipmentDate() %></td>
                 <td><%= shipment.getShipmentAddress() %></td>

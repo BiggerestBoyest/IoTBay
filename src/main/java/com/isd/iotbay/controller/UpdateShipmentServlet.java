@@ -15,6 +15,8 @@ import com.isd.iotbay.Staff;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -26,7 +28,6 @@ public class UpdateShipmentServlet extends HttpServlet {
                 HttpSession session = request.getSession();
 
         int shipmentID = Integer.parseInt(request.getParameter("shipmentID"));
-        int orderID = Integer.parseInt(request.getParameter("orderID"));
         String shipmentMethod = request.getParameter("shipmentMethod");
         String shipmentDate = request.getParameter("shipmentDate");
         String shipmentAddress = request.getParameter("shipmentAddress");
@@ -34,11 +35,21 @@ public class UpdateShipmentServlet extends HttpServlet {
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
-        
+        Shipment currentShipment = (Shipment)session.getAttribute("currentShipment");
+
         try {
-            manager.updateShipment(shipmentID, orderID, shipmentMethod, shipmentDate, shipmentAddress);
-            response.sendRedirect("viewShipments.jsp");
+            manager.updateShipment(shipmentID, order.GetID(), shipmentMethod, shipmentDate, shipmentAddress);
+            currentShipment = manager.findShipmentById(shipmentID);
+            session.setAttribute("currentShipment", currentShipment);
+
+            List<Shipment> shipments = manager.GetAllShipmentsFromOrder(order.GetID());
+            System.out.println(shipments.get(0).getshipmentMethod());
+            
+            request.setAttribute("shipments", shipments);
+            request.setAttribute("shipment",currentShipment);
+            request.getRequestDispatcher("updateShipment.jsp").include(request, response);
         } catch (SQLException e) {
+
             e.printStackTrace();
             request.setAttribute("error", "Unable to update shipment details.");
             request.getRequestDispatcher("updateShipment.jsp").forward(request, response);
@@ -46,7 +57,8 @@ public class UpdateShipmentServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                        HttpSession session = request.getSession();
+
+        HttpSession session = request.getSession();
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
         Order order = (Order)session.getAttribute("currentOrder");
@@ -62,7 +74,7 @@ public class UpdateShipmentServlet extends HttpServlet {
         } catch (  SQLException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "An error occurred: {0}", e.getMessage());;
             request.setAttribute("error", "Unable to retrieve shipment details.");
-            request.getRequestDispatcher("viewShipments.jsp").forward(request, response);
+            request.getRequestDispatcher("updateShipment.jsp").forward(request, response);
         }
     }
 }

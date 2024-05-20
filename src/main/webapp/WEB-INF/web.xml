@@ -170,6 +170,11 @@
         <servlet-class>com.isd.iotbay.controller.AddProductToExistingOrderServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>AddShipmentToOrderServlet</servlet-name>
+        <servlet-class>com.isd.iotbay.controller.AddShipmentToOrderServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddProductToOrderServlet</servlet-name>
         <url-pattern>/AddProductToOrderServlet</url-pattern>
@@ -197,6 +202,10 @@
       <servlet-mapping>
         <servlet-name>ViewShipmentServlet</servlet-name>
         <url-pattern>/ViewShipmentServlet</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>AddShipmentToOrderServlet</servlet-name>
+        <url-pattern>/AddShipmentToOrderServlet</url-pattern>
     </servlet-mapping>
       <servlet-mapping>
         <servlet-name>RemoveProductFromOrderServlet</servlet-name>

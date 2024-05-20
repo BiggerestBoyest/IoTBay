@@ -17,7 +17,7 @@
     <% 
         Shipment shipment = (Shipment) request.getAttribute("shipment");
         if (shipment == null) {
-            response.sendRedirect("viewShipments.jsp");
+            response.sendRedirect("ViewShipmentServlet");
             return;
         }
     %>
@@ -26,10 +26,6 @@
     <form action="UpdateShipmentServlet" method="post">
         <input type="hidden" name="shipmentID" value="<%= shipment.getshipmentID() %>">
         <table>
-            <tr>
-                <td><label for="orderID">Order ID:</label></td>
-                <td><input type="text" id="orderID" name="orderID" value="<%= shipment.getorderID() %>"></td>
-            </tr>
             <tr>
                 <td><label for="shipmentMethod">Shipment Method:</label></td>
                 <td><input type="text" id="shipmentMethod" name="shipmentMethod" value="<%= shipment.getshipmentMethod() %>"></td>
@@ -46,6 +42,6 @@
         <input type="submit" value="Update Shipment">
     </form>
     
-    <a href="viewShipments.jsp">Back to Shipment Management</a>
+    <a href="ViewShipmentServlet">Back to Shipment Management</a>
 </body>
 </html>

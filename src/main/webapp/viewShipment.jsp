@@ -46,6 +46,7 @@
         <tbody>
             <%
                 List<Shipment> shipments = (List<Shipment>) request.getAttribute("shipments");
+                String updatedShipment = (String)request.getAttribute("updatedShipment");
                 if (shipments != null && !shipments.isEmpty()) {
                     for (Shipment shipment : shipments) {
             %>
@@ -64,6 +65,10 @@
                         <input type="hidden" name="shipmentID" value="<%= shipment.getshipmentID() %>">
                         <input type="submit" value="Delete">
                     </form>
+                         <form action="AddShipmentToOrderServlet" method="post" style="display:inline;">
+                        <input type="hidden" name="shipmentID" value="<%= shipment.getshipmentID() %>">
+                        <input type="submit" value="Add To Order">
+                    </form>
                 </td>
             </tr>
             <%
@@ -76,6 +81,10 @@
             <%
                 }
             %>
+            
+        <span><%=updatedShipment == null ? "" : updatedShipment%></span>
+            
+            
         </tbody>
     </table>
     

@@ -59,6 +59,8 @@
         </form>
         
         <a href='Index.jsp'>Back to Main Page</a><br>
+        <a href='collection_update.jsp'>Edit Product</a><br>
+
         <span><%= (added!= null ? added : "")%></span>
     </body>
 </html>

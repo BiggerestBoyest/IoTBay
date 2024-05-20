@@ -53,7 +53,7 @@ public class ViewShipmentServlet extends HttpServlet {
             } else if (shipmentDate != null && !shipmentDate.isEmpty()) {
                 shipments = manager.findShipmentsByDate(shipmentDate);
             } else {
-                shipments = manager.getAllShipments();
+                shipments = manager.GetAllShipmentsFromOrder(order.GetID());
             }
 
             request.setAttribute("shipments", shipments);

@@ -20,10 +20,6 @@
     <form action="CreateShipmentServlet" method="post">
         <table>
             <tr>
-                <td><label for="orderID">Order ID:</label></td>
-                <td><input type="text" id="orderID" name="orderID"></td>
-            </tr>
-            <tr>
                 <td><label for="shipmentMethod">Shipment Method:</label></td>
                 <td><input type="text" id="shipmentMethod" name="shipmentMethod"></td>
             </tr>

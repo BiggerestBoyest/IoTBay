@@ -31,10 +31,8 @@ public class OrderServlet  extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
  
         HttpSession session = request.getSession();
-        //retrieve the product name that was searched for by the user
         DBManager manager = (DBManager) session.getAttribute("manager");
         Customer customer = (Customer)session.getAttribute("customer");
         Staff staff = (Staff)session.getAttribute("staff");
@@ -47,17 +45,14 @@ public class OrderServlet  extends HttpServlet{
             if(customer != null)
             {
                 order.SetCustomerID(customer.GetID());
-               // manager.CreateCustomerOrder(orderID, customer.GetID());
             } else if (staff != null)
             {
                 order.SetStaffID(staff.GetID());
-                //manager.CreateCustomerOrder(orderID, customer.GetID());
             } else 
             {
                 int guestID = manager.GenerateNewGuestID();
                 session.setAttribute("guest", guestID);
                 order.SetGuestID(guestID);
-               // manager.CreateGuestOrder(orderID, guestID);
             }
         }
          catch(SQLException ex)

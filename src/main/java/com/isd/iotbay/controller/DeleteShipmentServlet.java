@@ -32,11 +32,11 @@ public class DeleteShipmentServlet extends HttpServlet {
         Order order = (Order)session.getAttribute("currentOrder");
         try {
             manager.deleteShipment(shipmentID);
-            response.sendRedirect("viewShipments.jsp");
+            response.sendRedirect("viewShipment.jsp");
         } catch (  SQLException e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "An error occurred: {0}", e.getMessage());
             request.setAttribute("error", "Unable to delete shipment details.");
-            request.getRequestDispatcher("viewShipments.jsp").forward(request, response);
+            request.getRequestDispatcher("viewShipment.jsp").forward(request, response);
         }
     }
 }

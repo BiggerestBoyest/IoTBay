@@ -52,8 +52,10 @@ public class AddProductToOrderServlet  extends HttpServlet{
                 {
                     order.AddProduct(product);
                     System.out.println("added product");
+                    manager.decreaseStock(product.getProduct_ID(), 1);
                    // manager.AddProductToOrder(order.GetID(), product.getProduct_ID());
                     session.setAttribute("addedProduct", product.getProduct_name() + " was added to your order.");
+                    session.setAttribute("allProducts",manager.showCollection());
                     break;
                 }
             }
